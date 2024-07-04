@@ -1,7 +1,6 @@
 # Refuges & Gardiens
 
-![logo_RG](https://github.com/zaobr/Refuges-Gardiens/assets/88708725/42b6cc4b-f252-4563-842d-a2e79365b46b)
-
+![logo_RG](https://github.com/zaobr/Refuges-Gardiens/assets/88708725/4b9035d8-aeea-4da5-8d14-7fc39f4ac2c3)
 
 **Description**
 
