@@ -11,7 +11,7 @@ function App (){
           <h1>Refuges & Gardiens arrive bientôt.</h1>
         </div>
         <div align="center">
-          <Illustration/>
+          <Illustration />
         </div>
       </main>
     </>
