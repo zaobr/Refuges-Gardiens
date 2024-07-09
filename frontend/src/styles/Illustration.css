@@ -1,0 +1,37 @@
+html {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+  }
+  
+  .illustration-outer {
+    display: flex;
+  
+}
+  
+  .illustration-inner {
+    position: absolute;
+    right: 0%;
+    margin-top: 200px;
+  }
+  
+  .i1 {
+    left: 75px;
+    top: 26px;
+  }
+  
+  .i2 {
+    left: 68px;
+    top: -20px;
+  }
+  
+  .i3 {
+    left: 50px;
+    top: 72px;
+  }
+  
+  .i4 {
+    left: 0px;
+    top: 50px;
+  }
+  
