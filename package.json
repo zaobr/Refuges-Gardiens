@@ -4,7 +4,7 @@
   "description": "![logo_RG](https://github.com/zaobr/Refuges-Gardiens/assets/88708725/4b9035d8-aeea-4da5-8d14-7fc39f4ac2c3)",
   "main": "vite.config.js",
   "scripts": {
-    "dev": "cd frontend/ && npm run dev",
+    "dev": "cd backend/ && nodemon index.js && cd frontend/ && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd frontend/ && npm run build"
   },
