@@ -37,7 +37,8 @@ Refuges & Gardiens est une application web dédiée à la mise en relation des a
 
 ## Démarrez dès aujourd'hui !
 
-Visitez notre site web pour en savoir plus et vous inscrire : [Refuges & Gardiens](https://refuges-gardiens.vercel.app//)
+Visitez notre site web pour en savoir plus et vous inscrire : [Refuges & Gardiens](https://refuges-gardiens.vercel.app/)
+
 
 **Aidez-nous à faire la différence !**
 
