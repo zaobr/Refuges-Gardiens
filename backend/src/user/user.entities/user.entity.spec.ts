@@ -1,3 +1,4 @@
+import { HashingService } from '../../auth/hashing.service';
 import { User } from './user.entity';
 
 describe('User', () => {

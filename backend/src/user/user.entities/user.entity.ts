@@ -16,9 +16,9 @@ export class User {
     email: string;
 
     @Column({ type: "varchar", length: 255 })
-    password: string;
+    hashedPassword: string;
 
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: "varchar", length: 255, default: "" })
     city: string;
     
     @Column({ type: "varchar", length: 255, nullable: true })
@@ -27,10 +27,10 @@ export class User {
     @Column({ type: "varchar", length: 255, nullable: true })
     banner: string;
 
-    @Column({ type: "varchar", length: 10 })
+    @Column({ type: "varchar", length: 10, default: "" })
     phone_number: string;
 
-    @Column({type: "text"})
+    @Column({type: "text", nullable: true})
     description: string;
 
     @Column({type: "boolean", default: false})
