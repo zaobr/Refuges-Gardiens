@@ -6,19 +6,22 @@ import {
     Put,
     Delete,
     Param,
+    UseGuards
   } from '@nestjs/common';
 import { User } from "../user.entities/user.entity";
 import { UserService } from "../user.services/user.service";
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
     constructor(private service: UserService) {}
 
     @Get(':id')
-    get(@Param() params) {
+    get(@Param('id') params): Promise<User[]> {
       return this.service.getUser(params.id);
     }
 
+    
     @Get()
     async getUsers(): Promise<User[]> {
       return this.service.getUsers();
@@ -42,3 +45,4 @@ export class UserController {
 
 }
 
+//Pour protéger une route: @UseGuards(AuthGuard('jwt'))
