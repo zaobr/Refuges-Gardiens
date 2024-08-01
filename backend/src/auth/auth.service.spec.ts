@@ -58,7 +58,7 @@ describe('AuthService', () => {
   describe('login', () => {
     it('should return access token for valid user with correct password', async () => {
       const mockHashingService = new HashingService();
-      const mockUser = new User(mockHashingService);
+      const mockUser = new User();
       mockUser.id = 1;
       mockUser.firstname = "Antoine";
       mockUser.lastname = "Dupont";
@@ -93,7 +93,7 @@ describe('AuthService', () => {
 
     it('should return status 404 for incorrect password', async () => {
       const mockHashingService = new HashingService();
-      const mockUser = new User(mockHashingService);
+      const mockUser = new User();
       mockUser.id = 1;
       mockUser.firstname = "Antoine";
       mockUser.lastname = "Dupont";
@@ -147,7 +147,7 @@ describe('AuthService', () => {
     });
 
     it('should throw an error if email is already taken', async () => {
-      const existingUser = new User(hashingService as HashingService);
+      const existingUser = new User();
       existingUser.email = 'john.doe@mail.com';
       (userService.getUserByEmail as jest.Mock).mockResolvedValue(existingUser);
 

@@ -35,10 +35,6 @@ export class AuthService {
                 console.error('User not found:', email);
                 return { status: 404, message: 'User not found' };
             }
-
-            console.log('Plaintext password:', password);
-        console.log('Hashed password from DB:', user.hashedPassword);
-
             const match = await this.hashingService.comparePassword(password, user.hashedPassword);
 
             if (match) {
@@ -69,7 +65,6 @@ export class AuthService {
                 throw new Error('Email already taken')
             }
             const hashedPassword = await this.hashingService.hashPassword(password);
-            console.log('Hashed Password during registration:', hashedPassword);
     
             const user = new User();
             user.firstname = firstname;
