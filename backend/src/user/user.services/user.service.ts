@@ -9,10 +9,10 @@ export class UserService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  // cette route est à adapter avec des conditions WHERE (genre si le user s'est positionner sur une mission) et il faut peut-être rajouter des paramètres
+  // cette route est à adapter avec des conditions WHERE (genre si le user s'est positionné sur une mission) et il faut peut-être rajouter des paramètres
   async getUsers(): Promise<User[]> {
     return await this.usersRepository.find({
-      select: ['id', 'firstname', 'lastname']
+      select: ['id', 'firstname', 'lastname', 'hashedPassword']
     });
   }
 
@@ -23,20 +23,24 @@ export class UserService {
     });
   } 
 
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return this.usersRepository.findOneBy({ email: email });
+  }
+
   saveUser(user: User): Promise<User> {
     return this.usersRepository.save(user);
   }
 
-  async updateUser(id: string, updateUserDto: Partial<User>): Promise<User> {
+  async updateUser(id: number, updateUser: Partial<User>): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id: Number(id) } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    const updatedUser = { ...user, ...updateUserDto };
+    const updatedUser = { ...user, ...updateUser };
     return this.usersRepository.save(updatedUser);
   }
 
-  deleteUser(user: User): void {
-    this.usersRepository.delete(user);
+  deleteUser(id: number): void {
+    this.usersRepository.delete(id);
   }
 }
