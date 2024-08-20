@@ -21,12 +21,6 @@ export class AuthController {
             };
         }
 
-        const accessToken = result.access_token
-        res.cookie('access_token', accessToken, {
-              httpOnly: true,   // Secure against XSS
-              maxAge: 3600000,  // 1 hour
-          });
-
         return {
             statusCode: 200,
             data: result,
