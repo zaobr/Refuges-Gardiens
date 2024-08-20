@@ -1,6 +1,7 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Res, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './auth.dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -9,9 +10,9 @@ export class AuthController {
     ){}
 
     @Post('login')
-    async login(@Body() body): Promise<any> {
-        const { email, password } = body;
-        const result = await this.authService.login(email, password);
+    async login(@Body() LoginDto: LoginDto, @Res({ passthrough: true }) res: Response): Promise<any> {
+        const { email, password } = LoginDto;
+        const result = await this.authService.login(email, password, res);
 
         if (result.status && result.status === 404) {
             return {

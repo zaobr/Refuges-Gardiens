@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.services/user.service';
 import { Injectable } from '@nestjs/common';
 import { HashingService } from './hashing.service';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +27,7 @@ export class AuthService {
     }
 
    
-    public async login(email: string, password: string): Promise<any> {
+    public async login(email: string, password: string, res: Response): Promise<any> {
         try {
             const user = await this.userService.getUserByEmail(email);
 
@@ -41,7 +42,7 @@ export class AuthService {
                 // user found
                 const payload = { email: user.email} ;
                 const accessToken = this.jwtService.sign(payload);
-
+                
                 return {
                     expires_in: 3600, // 1heure
                     access_token: accessToken,

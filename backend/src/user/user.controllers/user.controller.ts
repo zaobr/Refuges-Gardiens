@@ -20,8 +20,7 @@ export class UserController {
     get(@Param('id') params): Promise<User[]> {
       return this.service.getUser(params.id);
     }
-
-    
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async getUsers(): Promise<User[]> {
       return this.service.getUsers();
