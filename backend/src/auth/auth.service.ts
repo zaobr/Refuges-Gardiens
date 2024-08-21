@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.services/user.service';
 import { Injectable } from '@nestjs/common';
 import { HashingService } from './hashing.service';
-import { Response } from 'express';
+import { CreateUserDto } from '../user/user.dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +27,7 @@ export class AuthService {
     }
 
    
-    public async login(email: string, password: string, res: Response): Promise<any> {
+    public async login(email: string, password: string): Promise<any> {
         try {
             const user = await this.userService.getUserByEmail(email);
 
@@ -66,7 +66,7 @@ export class AuthService {
             }
             const hashedPassword = await this.hashingService.hashPassword(password);
     
-            const user = new User();
+            const user = new CreateUserDto();
             user.firstname = firstname;
             user.lastname = lastname;
             user.email = email;

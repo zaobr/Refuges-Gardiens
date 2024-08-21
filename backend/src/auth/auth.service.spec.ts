@@ -156,6 +156,12 @@ describe('AuthService', () => {
         .toThrow('Email already taken');
     });
 
+    it('should throw an error if a field is missing', async () => {
+      await expect(authService.register('', 'Doe', 'john.doe@mail.com', 'password'))
+        .rejects
+        .toThrow('Registration failed');
+    });
+
     it('should throw an error if registration fails', async () => {
       (userService.getUserByEmail as jest.Mock).mockResolvedValue(undefined);
       (hashingService.hashPassword as jest.Mock).mockRejectedValue(new Error('Hashing failed'));

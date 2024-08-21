@@ -11,6 +11,7 @@ import {
 import { User } from "../user.entities/user.entity";
 import { UserService } from "../user.services/user.service";
 import { AuthGuard } from '@nestjs/passport';
+import { CreateUserDto } from '../user.dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -27,8 +28,8 @@ export class UserController {
     }
 
     @Post()
-    create(@Body() user: User) {
-      return this.service.saveUser(user);
+    create(@Body() createUserDto: CreateUserDto) {
+      return this.service.saveUser(createUserDto);
     }
   
     @Put(':id')
