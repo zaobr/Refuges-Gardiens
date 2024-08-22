@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+.NavBar {
+  width: 430px;
+  height: 100px;
+  background-color: #FEF2DC;
+}
+
+.NavBar img {
+  width: 74.05px;
+  height: 75px;
+  position: absolute;
+  top: 13px;
+  left: 9px;
+  border-radius: 40px;
+}
+
+.refuges {
+  width: 95px;
+  height: 28px;
+  position: absolute;
+  top: 21px;
+  left: 129px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28.18px;
+  color: #F9A243;
+}
+  
+.gardiens {
+  width: 103px;
+  height: 28px;
+  position: absolute;
+  top: 50px;
+  left: 125px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28.18px;
+  color: #F9A243;
+}
+
+.and {
+  width: 44px;
+  height: 58px;
+  position: absolute;
+  top: 21px;
+  left: 88px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 56.35px;
+  color: #F9A243;
+}
