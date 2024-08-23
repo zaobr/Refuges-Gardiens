@@ -9,6 +9,8 @@ import { AuthService } from './auth.service';
 import { UserService } from 'src/user/user.services/user.service';
 import { User } from 'src/user/user.entities/user.entity';
 import { JwtStrategy } from './jwt.strategy';
+import { ResetTokenService } from './reset-token.service';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { JwtStrategy } from './jwt.strategy';
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [HashingService, AuthService, UserService, JwtStrategy],
+  providers: [HashingService, AuthService, UserService, JwtStrategy, ResetTokenService, MailerService],
   controllers: [AuthController],
   exports: [HashingService],
 })

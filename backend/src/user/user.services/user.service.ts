@@ -7,7 +7,8 @@ import { CreateUserDto } from '../user.dto/create-user.dto';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User) 
+    private readonly usersRepository: Repository<User>,
   ) {}
 
   // cette route est à adapter avec des conditions WHERE (genre si le user s'est positionné sur une mission) et il faut peut-être rajouter des paramètres
@@ -44,4 +45,5 @@ export class UserService {
   deleteUser(id: number): void {
     this.usersRepository.delete(id);
   }
+
 }
