@@ -20,7 +20,7 @@ export class UserService {
 
   async getUser(id: number): Promise<User[]> {
     return await this.usersRepository.find({
-      select: ['firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phone_number', 'description', 'organization_name', 'is_admin', 'is_organization'],
+      select: ['firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phoneNumber', 'description', 'organizationName', 'isAdmin', 'isOrganization', 'createdAt'],
       where: [{ id: id }],
     });
   } 
