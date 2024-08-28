@@ -3,41 +3,25 @@
   padding: 0;
 }
 
-
 .NavBar {
-  width: 430px;
+  width: 100%; /* Utiliser 100% pour la réactivité */
+  max-width: 430px; /* Largeur maximale */
   height: 100px;
   background-color: #FEF2DC;
+  display: grid; /* Utiliser flex pour l'alignement */
+  grid-template-columns: auto 1fr auto;
+  padding: 0 20px; /* Espacement horizontal */
+  flex-direction: row; /* Alignement horizontal */
+  align-items: center;
 }
 
 .NavBar img {
   width: 74.05px;
   height: 75px;
-  position: absolute;
-  top: 13px;
-  left: 9px;
   border-radius: 40px;
 }
 
-.refuges {
-  width: 95px;
-  height: 28px;
-  position: absolute;
-  top: 21px;
-  left: 129px;
-  font-family: 'Raleway', sans-serif;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 28.18px;
-  color: #F9A243;
-}
-  
-.gardiens {
-  width: 103px;
-  height: 28px;
-  position: absolute;
-  top: 50px;
-  left: 125px;
+.refuges, .gardiens, .and {
   font-family: 'Raleway', sans-serif;
   font-weight: 700;
   font-size: 24px;
@@ -45,15 +29,28 @@
   color: #F9A243;
 }
 
+
 .and {
-  width: 44px;
-  height: 58px;
-  position: absolute;
-  top: 21px;
-  left: 88px;
-  font-family: 'Raleway', sans-serif;
-  font-weight: 700;
   font-size: 48px;
   line-height: 56.35px;
-  color: #F9A243;
+}
+
+.regard {
+  display: flex;
+  flex-direction: column;
+  padding-left: 5px;
+}
+
+.title {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.icon {
+  display: flex;
+
+}
+
+.icon svg {
+  padding: 0 3px;
 }
