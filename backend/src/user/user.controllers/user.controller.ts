@@ -21,7 +21,7 @@ export class UserController {
     get(@Param('id') params): Promise<User[]> {
       return this.service.getUser(params.id);
     }
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt')) //placé ici à des fins de tests
     @Get()
     async getUsers(): Promise<User[]> {
       return this.service.getUsers();
@@ -42,7 +42,6 @@ export class UserController {
       this.service.deleteUser(params.id);
       return `Deletion complete`
     }
-
 }
 
 //Pour protéger une route: @UseGuards(AuthGuard('jwt'))

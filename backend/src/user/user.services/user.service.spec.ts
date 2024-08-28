@@ -52,7 +52,7 @@ describe('UserService', () => {
     jest.spyOn(hashingService, 'hash').mockResolvedValue(hashedToken);
     jest.spyOn(usersRepository, 'save').mockResolvedValue(mockUser);
 
-    const result = await userService.setResetToken(mockUser);
+    const result = await resetTokenService.resetTokenGenerator();
 
     expect(usersRepository.findOne).toHaveBeenCalledWith({ where: { email } });
     expect(resetTokenService.resetTokenGenerator).toHaveBeenCalled();
@@ -71,7 +71,7 @@ describe('UserService', () => {
 
     jest.spyOn(usersRepository, 'findOne').mockResolvedValue(null);
 
-    await expect(userService.setResetToken(mockUser)).rejects.toThrow('User not found');
+    await expect(resetTokenService.resetTokenGenerator()).rejects.toThrow('User not found');
 
     expect(usersRepository.findOne).toHaveBeenCalledWith({ where: { email } });
   });
