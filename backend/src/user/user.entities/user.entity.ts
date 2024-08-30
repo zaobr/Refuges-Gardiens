@@ -3,8 +3,10 @@ import {
     Column,
     PrimaryGeneratedColumn,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    OneToOne
 } from 'typeorm';
+import { Organization } from '../../organization/organization.entities/organization.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -53,6 +55,9 @@ export class User {
 
     @Column({ type: 'timestamp', nullable: true })
     resetPasswordExpires: Date;
+
+    @OneToOne(() => Organization, (organization) => organization.user)
+    organization: Organization;
 
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;

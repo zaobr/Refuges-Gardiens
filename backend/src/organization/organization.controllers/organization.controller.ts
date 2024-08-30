@@ -18,8 +18,8 @@ export class OrganizationController {
     ) { }
 
     @Get(':id')  // id de l'user en param => donne la table orga
-    get(@Param('id') params): Promise<Organization> {
-        return this.service.getOrganizationId(params.userId)
+    get(@Param('id') userId: number): Promise<Organization> {
+        return this.service.getOrganizationId(userId)
     }
 
     @Get('/verified')
@@ -38,8 +38,8 @@ export class OrganizationController {
     }
 
     @Delete(':id')
-    deleteOrganization(@Param() params) {
-        this.service.deleteOrganization(params.id);
+    deleteOrganization(@Param('id') id: number) {
+        this.service.deleteOrganization(id);
         return 'Deletion complete'
     }
 }

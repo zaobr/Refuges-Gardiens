@@ -4,10 +4,10 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToOne,
     JoinColumn,
     Index,
     OneToMany,
+    OneToOne,
 } from 'typeorm';
 import { User } from '../../user/user.entities/user.entity';
 import { Mission } from '../../mission/mission.entities/mission.entity'
@@ -18,7 +18,7 @@ export class Organization {
     id: number;
 
     @Index()
-    @ManyToOne(() => User, (user) => user.isOrganization)
+    @OneToOne(() => User, (user) => user.isOrganization)
     @JoinColumn({ name: 'user_id' })
     user: User;
 

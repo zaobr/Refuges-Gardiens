@@ -29,7 +29,7 @@ export class OrganizationService {
     async saveOrganization(createOrganizationDto: CreateOrganizationDto): Promise<Organization> {
         const { userId, isVerified } = createOrganizationDto;
 
-        const user = await this.organizationRepository.manager.findOne(User, { where: { id: userId } });
+        const user = await this.organizationRepository.manager.findOne(User, { where: { id: userId } }); //User renvoie toute les infos ??
 
         if (!user) {
             throw new Error('User not found');
@@ -37,10 +37,10 @@ export class OrganizationService {
 
         const organization = this.organizationRepository.create({
             user,
-            isVerified: isVerified ?? false, // false par défaut
+            isVerified: isVerified ?? false, // Default to false if not provided
         });
 
-        return await this.organizationRepository.save(organization)
+        return await this.organizationRepository.save(organization);
     }
 
     async updateOrganization(id: number, updateOrganization: Partial<Organization>): Promise<Organization> {

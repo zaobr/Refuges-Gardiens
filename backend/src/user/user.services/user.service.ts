@@ -25,6 +25,13 @@ export class UserService {
     });
   } 
 
+  async getUserById(id: number): Promise<User | undefined> {
+    return await this.usersRepository.findOne({ 
+      select: ['id', 'firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phoneNumber', 'description', 'organizationName', 'isAdmin', 'isOrganization'],
+      where: [{id: id}] 
+    });
+  }
+
   async getUserByEmail(email: string): Promise<User | undefined> {
     return this.usersRepository.findOneBy({ email: email });
   }
@@ -33,7 +40,7 @@ export class UserService {
     return this.usersRepository.save(user);
   }
 
-  async updateUser(id: number, updateUser: Partial<User>): Promise<User> {
+  async updateUser(id: number, updateUser: Partial<User>): Promise<User> { //le password est renvoyé à cause de cettte promise ?
     const user = await this.usersRepository.findOne({ where: { id: Number(id) } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);

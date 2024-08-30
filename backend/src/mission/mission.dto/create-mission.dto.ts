@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { IsDateString, IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator'
 
 export class CreateMissionDto {
     @IsString()
@@ -21,10 +21,15 @@ export class CreateMissionDto {
     @IsNotEmpty()
     numberOfHours: number;
     
+    @IsDateString()
     @IsNotEmpty()
     deadline: Date;
 
     @IsNotEmpty()
     @IsNumber()
-    organization: string;
+    organization: number; //organization id
+
+    @IsOptional()
+    @IsString()
+    picture?: string; 
 }

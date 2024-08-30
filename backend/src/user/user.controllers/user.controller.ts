@@ -18,16 +18,16 @@ export class UserController {
     constructor(private service: UserService) {}
 
     @Get(':id')
-    get(@Param('id') params): Promise<User[]> {
-      return this.service.getUser(params.id);
+    get(@Param('id') id: number): Promise<User> {
+      return this.service.getUserById(id);
     }
-    @UseGuards(AuthGuard('jwt')) //placé ici à des fins de tests
+
     @Get()
     async getUsers(): Promise<User[]> {
       return this.service.getUsers();
     }
 
-    @Post()
+    @Post() //a supprimer
     create(@Body() createUserDto: CreateUserDto) {
       return this.service.saveUser(createUserDto);
     }
@@ -38,8 +38,8 @@ export class UserController {
     }
   
     @Delete(':id')
-    deleteUser(@Param() params) {
-      this.service.deleteUser(params.id);
+    deleteUser(@Param('id') id: number) {
+      this.service.deleteUser(id);
       return `Deletion complete`
     }
 }
