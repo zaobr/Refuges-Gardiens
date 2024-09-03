@@ -67,6 +67,7 @@ const MissionCard = ({ missionId }) => {
                         {/* Column 1 */}
                         <div>
                             <h3 className='font-bold'>Description</h3>
+                            <p className='text-sm'>Catégorie: {mission.category}</p>
                             <p className='text-sm'>Durée: {mission.numberOfHours}h</p>
                         </div>
                         {/* Column 2 */}

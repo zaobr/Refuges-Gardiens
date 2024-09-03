@@ -52,6 +52,14 @@ function MissionCreation() {
                                     <label>Besoin de bénévoles
                                         <input type="number" name="volunteer" min={1} className="border block w-28 rounded-md border-orange-dark" />
                                     </label>
+                                    <label>Catégorie
+                                        <select name="category" className="border block w-28 rounded-md border-orange-dark">
+                                            <option>Animal</option>
+                                            <option>Nature</option>
+                                            <option>Refuge</option>
+                                            <option>Autre</option>
+                                        </select>
+                                    </label>
                                 </div>
                                 <div></div>
                                 <div>
