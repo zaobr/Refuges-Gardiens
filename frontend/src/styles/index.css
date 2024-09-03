@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-active {
+    @apply active:scale-95 active:shadow-inner;
+  }
+  
+  .btn-hover {
+    @apply hover:bg-orange-light;
+  }
+  
+  .btn-flex {
+    @apply flex-1;
+  }
+  
+  .btn-flex-shrink {
+    @apply flex-shrink-0;
+  }

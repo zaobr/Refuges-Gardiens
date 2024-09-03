@@ -15,7 +15,7 @@ export class AuthService {
         private readonly resetTokenService: ResetTokenService,
     ) { }
 
-    public async validateEmail(email: string): Promise<User> {
+    public async validateEmail(email: string): Promise<Partial<User>> {
         try {
             const user = await this.userService.getUserByEmail(email);
             if (!user) {
@@ -102,7 +102,7 @@ export class AuthService {
         return resetToken;
     }
 
-    async validateResetToken(resetToken: string, email: string): Promise<User> {
+    async validateResetToken(resetToken: string, email: string): Promise<Partial<User>> {
         const user = await this.userService.getUserByEmail(email);
 
         if (!user) {

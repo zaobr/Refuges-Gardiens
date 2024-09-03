@@ -1,6 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    OneToOne
+} from 'typeorm';
+import { Organization } from '../../organization/organization.entities/organization.entity';
 
-@Entity()
+@Entity({ name: 'user' })
 export class User {
 
     @PrimaryGeneratedColumn()
@@ -15,12 +23,12 @@ export class User {
     @Column({ type: "varchar", length: 255, unique: true })
     email: string;
 
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: "varchar", length: 255, select: false } )
     hashedPassword: string;
 
     @Column({ type: "varchar", length: 255, default: "" })
     city: string;
-    
+
     @Column({ type: "varchar", length: 255, nullable: true })
     picture: string;
 
@@ -28,23 +36,32 @@ export class User {
     banner: string;
 
     @Column({ type: "varchar", length: 10, default: "" })
-    phone_number: string;
+    phoneNumber: string;
 
-    @Column({type: "text", nullable: true})
+    @Column({ type: "text", nullable: true })
     description: string;
 
-    @Column({type: "boolean", default: false})
-    is_admin:boolean;
+    @Column({ type: "boolean", default: false })
+    isAdmin: boolean;
 
-    @Column({type: "boolean", default: false})
-    is_organization:boolean;
+    @Column({ type: "boolean", default: false })
+    isOrganization: boolean;
 
     @Column({ type: "varchar", length: 255, nullable: true })
-    organization_name:string;
+    organizationName: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, select: false })
     resetPasswordToken: string;
 
     @Column({ type: 'timestamp', nullable: true })
     resetPasswordExpires: Date;
+
+    @OneToOne(() => Organization, (organization) => organization.user)
+    organization: Organization;
+
+    @CreateDateColumn({ type: 'timestamp' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamp' })
+    updatedAt: Date;
 }

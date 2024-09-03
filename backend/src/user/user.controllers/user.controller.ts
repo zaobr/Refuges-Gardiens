@@ -12,37 +12,33 @@ import { User } from "../user.entities/user.entity";
 import { UserService } from "../user.services/user.service";
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from '../user.dto/create-user.dto';
+import { UpdateUserDto } from '../user.dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
     constructor(private service: UserService) {}
 
     @Get(':id')
-    get(@Param('id') params): Promise<User[]> {
-      return this.service.getUser(params.id);
+    get(@Param('id') id: number): Promise<User> {
+      return this.service.getUserById(id);
     }
-    @UseGuards(AuthGuard('jwt'))
+
     @Get()
     async getUsers(): Promise<User[]> {
       return this.service.getUsers();
     }
-
-    @Post()
-    create(@Body() createUserDto: CreateUserDto) {
-      return this.service.saveUser(createUserDto);
-    }
   
     @Put(':id')
-    update(@Param('id') id: number, @Body() user: User) {
-      return this.service.updateUser(id, user);
+    update(@Param('id') id: number, @Body() user: UpdateUserDto) {
+      this.service.updateUser(id, user);
+      return 'User updated'
     }
   
     @Delete(':id')
-    deleteUser(@Param() params) {
-      this.service.deleteUser(params.id);
+    deleteUser(@Param('id') id: number) {
+      this.service.deleteUser(id);
       return `Deletion complete`
     }
-
 }
 
 //Pour protéger une route: @UseGuards(AuthGuard('jwt'))
