@@ -22,20 +22,21 @@ export class MissionService {
     }
 
     async getMissionById(id: number): Promise<Mission> {
-        return await this.missionRepository.findOneBy({ id: id });
+        return await this.missionRepository.findOne({
+            where: { id: id },
+            relations: ['organization', 'organization.user']
+        });
     }
 
     async saveMission(createMissionDto: CreateMissionDto): Promise<Mission> {
         const { organization: organizationId, ...missionData } = createMissionDto;
 
-        // Fetch the Organization entity using the ID from the DTO
         const organization = await this.organizationRepository.findOne({ where: { id: organizationId } });
 
         if (!organization) {
             throw new Error('Organization not found');
         }
 
-        // Create the Mission entity with the Organization entity and other data
         const mission = this.missionRepository.create({
             ...missionData,
             organization,

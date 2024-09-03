@@ -12,6 +12,7 @@ import { User } from "../user.entities/user.entity";
 import { UserService } from "../user.services/user.service";
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from '../user.dto/create-user.dto';
+import { UpdateUserDto } from '../user.dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -26,15 +27,11 @@ export class UserController {
     async getUsers(): Promise<User[]> {
       return this.service.getUsers();
     }
-
-    @Post() //a supprimer
-    create(@Body() createUserDto: CreateUserDto) {
-      return this.service.saveUser(createUserDto);
-    }
   
     @Put(':id')
-    update(@Param('id') id: number, @Body() user: User) {
-      return this.service.updateUser(id, user);
+    update(@Param('id') id: number, @Body() user: UpdateUserDto) {
+      this.service.updateUser(id, user);
+      return 'User updated'
     }
   
     @Delete(':id')

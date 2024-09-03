@@ -10,6 +10,7 @@ import {
 import { OrganizationService } from '../organization.services/organization.service';
 import { Organization } from '../organization.entities/organization.entity';
 import { CreateOrganizationDto } from '../organization.dto/create-organization.dto';
+import { OrganizationDto } from '../organization.dto/organization.dto';
 
 @Controller('organization')
 export class OrganizationController {
@@ -17,14 +18,14 @@ export class OrganizationController {
         private service: OrganizationService
     ) { }
 
-    @Get(':id')  // id de l'user en param => donne la table orga
-    get(@Param('id') userId: number): Promise<Organization> {
-        return this.service.getOrganizationId(userId)
+    @Get('verified')
+    getVerifiedOrganization(): Promise<Organization[]> {
+        return this.service.getVerifiedOrganization();
     }
 
-    @Get('/verified')
-    async getVerifiedOrganization(): Promise<Organization[]> {
-        return this.service.getVerifiedOrganization();
+    @Get(':id')  // id de l'user en param => donne la table orga
+    get(@Param('id') userId: number): Promise<OrganizationDto> {
+        return this.service.getOrganizationId(userId)
     }
 
     @Post()

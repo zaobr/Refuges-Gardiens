@@ -39,7 +39,7 @@ export class AuthController {
     }
 
     @Post('forgot-password')
-    async forgotPassword(@Body('email') email: string) { // plus tard: mettre reset link en param, et le front envoie son url
+    async forgotPassword(@Body('email') email: string) { 
         const user = await this.userService.getUserByEmail(email);
         if (user) {
             const resetToken = await this.authService.setResetToken(user);

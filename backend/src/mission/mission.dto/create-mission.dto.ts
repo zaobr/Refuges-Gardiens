@@ -32,4 +32,8 @@ export class CreateMissionDto {
     @IsOptional()
     @IsString()
     picture?: string; 
+
+    @IsNotEmpty()
+    @IsNumber()
+    volunteerNumber: number;
 }

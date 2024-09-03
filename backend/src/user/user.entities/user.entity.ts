@@ -23,7 +23,7 @@ export class User {
     @Column({ type: "varchar", length: 255, unique: true })
     email: string;
 
-    @Column({ type: "varchar", length: 255 })
+    @Column({ type: "varchar", length: 255, select: false } )
     hashedPassword: string;
 
     @Column({ type: "varchar", length: 255, default: "" })
@@ -50,7 +50,7 @@ export class User {
     @Column({ type: "varchar", length: 255, nullable: true })
     organizationName: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, select: false })
     resetPasswordToken: string;
 
     @Column({ type: 'timestamp', nullable: true })

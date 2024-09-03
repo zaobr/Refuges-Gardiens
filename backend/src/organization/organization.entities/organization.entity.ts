@@ -9,8 +9,8 @@ import {
     OneToMany,
     OneToOne,
 } from 'typeorm';
-import { User } from '../../user/user.entities/user.entity';
 import { Mission } from '../../mission/mission.entities/mission.entity'
+import { User } from '../../user/user.entities/user.entity';
 
 @Entity({ name: 'organization' })
 export class Organization {
@@ -18,7 +18,7 @@ export class Organization {
     id: number;
 
     @Index()
-    @OneToOne(() => User, (user) => user.isOrganization)
+    @OneToOne(() => User, (user) => user.organization)
     @JoinColumn({ name: 'user_id' })
     user: User;
 
