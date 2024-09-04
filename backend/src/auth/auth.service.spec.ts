@@ -16,8 +16,8 @@ describe('AuthService', () => {
       getUserByEmail: jest.fn(),
     };
     hashingService = {
-      comparePassword: jest.fn(),
-      hashPassword: jest.fn(),
+      compare: jest.fn(),
+      hash: jest.fn(),
     };
     jwtService = {
       sign: jest.fn(),
@@ -63,7 +63,7 @@ describe('AuthService', () => {
       mockUser.firstname = "Antoine";
       mockUser.lastname = "Dupont";
       mockUser.email = "antoine.dupont@mail.com";
-      mockUser.hashedPassword = await mockHashingService.hashPassword('correctPassword')
+      mockUser.hashedPassword = await mockHashingService.hash('correctPassword')
       mockUser.city = "Toulouse";
       mockUser.picture = "";
       mockUser.banner = "";
@@ -74,7 +74,7 @@ describe('AuthService', () => {
       mockUser.organization_name = null;
 
       (userService.getUserByEmail as jest.Mock).mockResolvedValue(mockUser);
-      (hashingService.comparePassword as jest.Mock).mockResolvedValue(true);
+      (hashingService.compare as jest.Mock).mockResolvedValue(true);
       (jwtService.sign as jest.Mock).mockReturnValue('fakeToken');
 
       const result = await authService.login('antoine.dupont@mail.com', 'correctPassword');
@@ -98,7 +98,7 @@ describe('AuthService', () => {
       mockUser.firstname = "Antoine";
       mockUser.lastname = "Dupont";
       mockUser.email = "antoine.dupont@mail.com";
-      mockUser.hashedPassword = await mockHashingService.hashPassword('correctPassword');
+      mockUser.hashedPassword = await mockHashingService.hash('correctPassword');
       mockUser.city = "Toulouse";
       mockUser.picture = "";
       mockUser.banner = "";
@@ -109,7 +109,7 @@ describe('AuthService', () => {
       mockUser.organization_name = null;
 
       (userService.getUserByEmail as jest.Mock).mockResolvedValue(mockUser);
-      (hashingService.comparePassword as jest.Mock).mockResolvedValue(false);
+      (hashingService.compare as jest.Mock).mockResolvedValue(false);
 
       const result = await authService.login('antoine.dupont@mail.com', 'wrongPassword');
       expect(result).toEqual({ status: 404, message: 'Incorrect password' });
@@ -134,7 +134,7 @@ describe('AuthService', () => {
       };
 
       (userService.getUserByEmail as jest.Mock).mockResolvedValue(undefined);
-      (hashingService.hashPassword as jest.Mock).mockResolvedValue('hashedpassword');
+      (hashingService.hash as jest.Mock).mockResolvedValue('hashedpassword');
       (userService.saveUser as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await authService.register('John', 'Doe', 'john.doe@example.com', 'password');
@@ -156,9 +156,15 @@ describe('AuthService', () => {
         .toThrow('Email already taken');
     });
 
+    it('should throw an error if a field is missing', async () => {
+      await expect(authService.register('', 'Doe', 'john.doe@mail.com', 'password'))
+        .rejects
+        .toThrow('Registration failed');
+    });
+
     it('should throw an error if registration fails', async () => {
       (userService.getUserByEmail as jest.Mock).mockResolvedValue(undefined);
-      (hashingService.hashPassword as jest.Mock).mockRejectedValue(new Error('Hashing failed'));
+      (hashingService.hash as jest.Mock).mockRejectedValue(new Error('Hashing failed'));
 
       await expect(authService.register('John', 'Doe', 'john.doe@mail.com', 'password'))
         .rejects

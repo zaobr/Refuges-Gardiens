@@ -21,9 +21,7 @@ function Login() {
 
         try {
         const response = await axios.post('http://localhost:5000/auth/login', formData);
-        console.log('Login successful:', response.data);
         const accessToken = response.data.data.access_token
-        console.log(accessToken)
         const cookies = new Cookies(null, {path: '/'})
         cookies.set('userLogin', accessToken)
         } catch (err) {

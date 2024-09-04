@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { databaseConfig } from './config/database.config';
 import { UsersModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { OrganizationModule } from './organization/organization.module';
+import { MissionModule } from './mission/mission.module';
 
 @Module({
   imports: [
@@ -16,9 +18,11 @@ import { AuthModule } from './auth/auth.module';
       useFactory: () => databaseConfig,
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    MissionModule,
+    OrganizationModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

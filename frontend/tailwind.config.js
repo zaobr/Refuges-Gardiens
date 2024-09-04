@@ -14,6 +14,9 @@ export default {
         'turquoise': '#50A699',
         'sky-blue': '#97D7E1'
       },
+      gridTemplateColumns: {
+        'card-info': 'auto 1fr auto',
+      },
       fontFamily: {
         title: ['Raleway', 'sans-serif'],
         text: ['Open Sans', 'sans-serif']

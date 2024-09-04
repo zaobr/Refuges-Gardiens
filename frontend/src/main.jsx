@@ -12,6 +12,10 @@ import RegisterOrgPage from './pages/RegisterOrgPage.jsx'
 import RegisterMemberPage from './pages/RegisterMemberPage.jsx'
 import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx"
 import ContactPage from "./pages/ContactPage.jsx"
+import MissionSearchPage from './pages/MissionSearchPage.jsx'
+import MissionCreationPage from './pages/MissionCreationPage.jsx'
+import MissionPage from './pages/MissionPage.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -44,6 +48,22 @@ const router = createBrowserRouter([
       {
         path: '/contact',
         element: <ContactPage/>
+      },
+      {
+        path: '/mission',
+        element: <MissionSearchPage />
+      },
+      {
+        path: 'mission/creation',
+        element: <MissionCreationPage />
+      },
+      {
+        path: '/mission/:missionId',
+        element: <MissionPage />
+      },
+      {
+        path: '/user/:userId',
+        element: <ProfilePage />
       }
     ]
   }

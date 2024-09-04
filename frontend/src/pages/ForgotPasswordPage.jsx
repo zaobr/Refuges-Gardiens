@@ -1,6 +1,35 @@
+import { useState } from "react";
+import axios from 'axios'
 import ContactButton from "../components/ContactButton";
 
 export default function ForgotPasswordPage() {
+    // const [formData, setFormData] = useState({
+    //     email: ''
+    // });
+
+    // //const resetLink = `http://localhost:5173/reset-password?token=${resetToken}&email=${email}`
+
+    // const handleChange = (e) => {
+    //     setFormData({
+    //         ...formData,
+    //         [e.target.name]: e.target.value
+    //     });
+    // };
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     const response = await axios.post('http://localhost:5000/auth/forgot-password', formData);
+
+
+    //     if (response.status === 201) {
+    //         const { resetToken, email } = response.data;
+
+    //         const resetLink = `http://localhost:5173/reset-password?token=${resetToken}&email=${email}`
+
+    //         await axios.post('http://localhost:5000/auth/send-reset-email', {email, resetLink})
+    //     }
+    // }
     return (
         <>
             <div className="w-full h-full flex flex-col justify-center items-center">
