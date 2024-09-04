@@ -65,5 +65,4 @@ export class UserService {
   deleteUser(id: number): void {
     this.usersRepository.delete(id);
   }
-
 }

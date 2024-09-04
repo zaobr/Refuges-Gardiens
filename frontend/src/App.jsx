@@ -7,8 +7,8 @@ import Header from "../src/components/Header"
 function App (){
   return (
     <>
-    <Header />
-      <main>
+    <Header/>
+      <main className="flex flex-col justify-start items-center">
         <Outlet/>
       </main>
     </>

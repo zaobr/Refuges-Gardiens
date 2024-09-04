@@ -46,23 +46,26 @@ function Register() {
         } 
     };
     return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <label>Firstname <br />
+        <div className="form">
+            <form onSubmit={handleSubmit} className="form-register">
+                <label className="firstname">Firstname
                     <input type="text" name="firstname" onChange={handleChange} value={formData.firstname} />
-                </label><br />
-                <label>Lastname <br />
+                </label>
+                <label className="lastname">Lastname
                     <input type="text" name="lastname" onChange={handleChange} value={formData.lastname} />
-                </label><br />
-                <label>Email <br />
+                </label>
+                <label className="email">Email
                     <input type="email" name="email" onChange={handleChange} value={formData.email} />
-                </label><br />
-                <label>Password <br />
+                </label>
+                <label className="password">Password
                     <input type="text" name="password" onChange={handleChange} value={formData.password} />
-                </label><br /><br />
-                <button type="submit" disabled={isLoading}>Submit</button>
+                </label>
+                <div className="button-container">
+                    <button className="cancel">Cancel</button>
+                    <button className="submit" type="submit" disabled={isLoading}>Submit</button>
+                </div>
             </form>
-        </>
+        </div>
     )
 }
 
