@@ -20,16 +20,10 @@ export class AuthController {
         const result = await this.authService.login(email, password);
 
         if (result.status && result.status === 404) {
-            return {
-                statusCode: 404,
-                message: result.message || 'Login failed',
-            };
+            return { message: result.message || 'Login failed' };
         }
 
-        return {
-            statusCode: 200,
-            data: result,
-        };
+        return { data: result };
     }
 
     @Post('register')

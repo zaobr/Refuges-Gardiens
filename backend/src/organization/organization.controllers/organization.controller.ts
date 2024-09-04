@@ -11,6 +11,8 @@ import { OrganizationService } from '../organization.services/organization.servi
 import { Organization } from '../organization.entities/organization.entity';
 import { CreateOrganizationDto } from '../organization.dto/create-organization.dto';
 import { OrganizationDto } from '../organization.dto/organization.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('organization')
 export class OrganizationController {
@@ -28,16 +30,19 @@ export class OrganizationController {
         return this.service.getOrganizationId(userId)
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     create(@Body() createOrganizationDto: CreateOrganizationDto) {
         return this.service.saveOrganization(createOrganizationDto);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Put(':id')
     update(@Param('id') id:number, @Body() organization: Organization) {
         return this.service.updateOrganization(id, organization);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
     deleteOrganization(@Param('id') id: number) {
         this.service.deleteOrganization(id);

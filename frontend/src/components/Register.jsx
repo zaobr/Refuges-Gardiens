@@ -37,9 +37,7 @@ function Register() {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:5000/auth/register', formData);
-
-            console.log('Registration successful:', response.data);
+            await axios.post('http://localhost:5000/auth/register', formData);
             navigate('/');
             
         } catch (err) {
