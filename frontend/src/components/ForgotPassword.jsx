@@ -26,8 +26,6 @@ function ForgotPassword() {
 
             const resetLink = `http://localhost:5173/reset-password?token=${resetToken}&email=${email}`
 
-            console.log('Reset Link:', resetLink);
-
             await axios.post('http://localhost:5000/auth/send-reset-email', {email, resetLink})
         }
     }

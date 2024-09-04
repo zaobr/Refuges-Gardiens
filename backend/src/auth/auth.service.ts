@@ -15,9 +15,9 @@ export class AuthService {
         private readonly resetTokenService: ResetTokenService,
     ) { }
 
-    public async validateEmail(email: string): Promise<Partial<User>> {
+    public async validateToken(id: number): Promise<Partial<User>> {
         try {
-            const user = await this.userService.getUserByEmail(email);
+            const user = await this.userService.getUserById(id);
             if (!user) {
                 throw new Error('User not found');
             }
@@ -35,14 +35,13 @@ export class AuthService {
 
             if (!user) {
                 // User not found
-                console.error('User not found:', email);
-                return { status: 404, message: 'User not found' };
+                return { message: 'User not found' };
             }
             const match = await this.hashingService.compare(password, user.hashedPassword);
 
             if (match) {
                 // user found
-                const payload = { email: user.email };
+                const payload = { id: user.id };
                 const accessToken = this.jwtService.sign(payload);
 
                 return {
@@ -51,11 +50,10 @@ export class AuthService {
                 }
             } else {
                 console.error('Password does not match for user:', email);
-                return { status: 404, message: 'Incorrect password' };
+                return { message: 'Incorrect password' };
             }
         } catch (error) {
             console.error('Failed to login user:', error)
-            return { status: 404 };
         }
 
     }
