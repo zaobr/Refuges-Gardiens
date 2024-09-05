@@ -4,6 +4,7 @@ function MissionCreation() {
 
     //useEffect pour fetch l'utilisateur connecté
     //prévoir un composant si user non connecté va sur cette page (cf redux)
+    //wiring à faire
 
     return (
         <div>

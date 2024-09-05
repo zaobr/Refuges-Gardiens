@@ -15,11 +15,36 @@ export class MissionService {
         private readonly organizationRepository: Repository<Organization>,
     ) { }
 
-    async getMissions(): Promise<Mission[]> {
-        return await this.missionRepository.find({
-            select: ['id', 'title', 'city']
-        });
+    async getMissions(filters: { keyword?: string; city?: string; date?: string; organization_id?: number }): Promise<Mission[]> {
+        const query = this.missionRepository.createQueryBuilder('mission');
+        
+        if (!filters.keyword && !filters.city && !filters.date && !filters.organization_id) {
+            return [];
+        }
+    
+        query.andWhere('mission.isDone = :isDone', { isDone: 0 });
+
+        if (filters.keyword) {
+            query.andWhere('(mission.title LIKE :keyword OR mission.description LIKE :keyword)', { keyword: `%${filters.keyword}%` });
+        }
+    
+        if (filters.city) {
+            query.andWhere('mission.city = :city', { city: filters.city });
+        }
+    
+        if (filters.date) {
+            query.andWhere('mission.deadline = :date', { date: filters.date });
+        }
+
+        if (filters.organization_id) {
+            query.andWhere('mission.organization_id = :organization_id', { organization_id: filters.organization_id });
+        }
+    
+        query.select(['mission.id', 'mission.title', 'mission.city', 'mission.description', 'mission.volunteerNumber', 'mission.deadline', 'mission.picture', 'mission.createdAt']);
+        return await query.getMany();
     }
+    
+    
 
     async getMissionById(id: number): Promise<Mission> {
         return await this.missionRepository.findOne({

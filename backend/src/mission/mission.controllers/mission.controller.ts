@@ -6,6 +6,7 @@ import {
     Put,
     Delete,
     Param,
+    Query
 } from '@nestjs/common';
 import { Mission } from '../mission.entities/mission.entity'
 import { MissionService } from '../mission.services/mission.service';
@@ -18,6 +19,15 @@ export class MissionController {
     constructor(
         private readonly service: MissionService
     ) { }
+
+    @Get()
+    getMissions(
+        @Query('keyword') keyword?: string,
+        @Query('city') city?: string,
+        @Query('date') date?: string
+    ): Promise<Mission[]> {
+        return this.service.getMissions({ keyword, city, date });
+    }
 
     @Get(':id')
     get(@Param('id') id: number): Promise<Mission> {
