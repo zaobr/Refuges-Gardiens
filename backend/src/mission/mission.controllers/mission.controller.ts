@@ -24,9 +24,11 @@ export class MissionController {
     getMissions(
         @Query('keyword') keyword?: string,
         @Query('city') city?: string,
-        @Query('date') date?: string
+        @Query('date') date?: string,
+        @Query('excludeMissionId') excludeMissionId?: number,
+        @Query('organization_id') organization_id?: number,
     ): Promise<Mission[]> {
-        return this.service.getMissions({ keyword, city, date });
+        return this.service.getMissions({ keyword, city, date, excludeMissionId, organization_id });
     }
 
     @Get(':id')

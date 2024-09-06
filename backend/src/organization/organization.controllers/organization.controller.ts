@@ -27,7 +27,7 @@ export class OrganizationController {
 
     @Get(':id')  // id de l'user en param => donne la table orga
     get(@Param('id') userId: number): Promise<OrganizationDto> {
-        return this.service.getOrganizationId(userId)
+        return this.service.getOrganizationId(userId);
     }
 
     @UseGuards(AuthGuard('jwt'))

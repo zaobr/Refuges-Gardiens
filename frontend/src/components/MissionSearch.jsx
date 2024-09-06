@@ -10,11 +10,14 @@ function MissionSearch() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const response = await axios.get('http://localhost:5000/mission', { params: { keyword, city, date } });
-        setMissions(response.data)
-    }
-
+        try {
+            const url = import.meta.env.VITE_API_URL;
+            const response = await axios.get(`${url}/mission`, { params: { keyword, city, date } });
+            setMissions(response.data);
+        } catch (error) {
+            console.error('Error fetching missions:', error);
+        }
+    };
     return (
         <div>
             <div style={{
@@ -38,7 +41,9 @@ function MissionSearch() {
                                     className="bg-white rounded-md m-1 w-2/6" />
                             </div>
                             <div>
-                                <button type="submit" className='bg-orange-dark border-orange-dark m-1 pl-2 pr-2 font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'>Rechercher</button>
+                                <button type="submit" className='bg-orange-dark border-orange-dark m-1 pl-2 pr-2 font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'
+                                >Rechercher
+                                </button>
                             </div>
                         </form>
                     </div>

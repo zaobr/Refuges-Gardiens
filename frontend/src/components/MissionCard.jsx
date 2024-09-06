@@ -3,15 +3,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/dateFormatUtils";
 import { FaShare } from "react-icons/fa";
+import MissionList from "./MissionList";
 
 const MissionCard = ({ missionId }) => {
     const [mission, setMission] = useState();
     const navigate = useNavigate();
+    const [missions, setMissions] = useState([]);
 
     useEffect(() => {
         const fetchMissionDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/mission/${missionId}`);
+                const url = import.meta.env.VITE_API_URL
+                const response = await axios.get(`${url}/mission/${missionId}`);
                 setMission(response.data);
             } catch (error) {
                 console.error("Error fetching mission details:", error);
@@ -19,6 +22,23 @@ const MissionCard = ({ missionId }) => {
         };
         fetchMissionDetails();
     }, [missionId]);
+
+    useEffect(() => {
+        if (mission && mission.city) {
+            const fetchMoreMissions = async () => {
+                try {
+                    const url = import.meta.env.VITE_API_URL;
+                    const response = await axios.get(`${url}/mission`, {
+                        params: { city: mission.city, limit: 10, excludeMissionId: Number(missionId) }
+                    });
+                    setMissions(response.data);
+                } catch (error) {
+                    console.error('Error fetching similar missions', error);
+                }
+            };
+            fetchMoreMissions();
+        }
+    }, [mission]);
 
     const handleConsultProfile = () => {
         navigate(`/user/${mission.organization.user.id}`)
@@ -38,14 +58,16 @@ const MissionCard = ({ missionId }) => {
     if (!mission) return <div>Loading...</div>
 
     return (
-        <div className='grid-rows-3 gap-4 mr-2 ml-2'>
-            <div className='grid grid-rows-3 gap-4'>
+        <div className='grid gap-4 mr-2 ml-2'>
+            <div className='grid gap-4 h-full'>
+                {/* Row 1 */}
                 <div>
-                    <img src={mission.picture} alt={`Photo de ${mission.title}`} />
+                    <img src={mission.picture} alt={`Photo de ${mission.title}`} className="max-h-60 w-full" />
                 </div>
-                <div className='grid grid-cols-card-info'>
+                {/* Row 2 */}
+                <div className='grid grid-cols-card-info h-auto'>
                     {/* Column 1 */}
-                    <div>
+                    <div className="content-center">
                         <h2 className='font-bold'>{mission.title}</h2>
                         <p className='text-sm'>Posté le {formatDate(mission.createdAt)}</p>
                     </div>
@@ -53,17 +75,18 @@ const MissionCard = ({ missionId }) => {
                     <div></div>
                     {/* Column 3 */}
                     <div className='grid grid-cols-2'>
-                        <div>
-                            <img src={mission.organization.user.picture} alt={`Photo de ${mission.organization.user.organizationName}`} />
+                        <div className="content-center flex justify-end">
+                            <img src={mission.organization.user.picture} alt={`Photo de ${mission.organization.user.organizationName}`} className="h-20" />
                         </div>
-                        <div className='ml-3'>
-                            <p className='text-center'>{mission.organization.user.organizationName}</p>
+                        <div className='content-center'>
+                            <p className='text-left'>{mission.organization.user.organizationName}</p>
                             <button className='text-sm text-center' onClick={handleConsultProfile}>Consulter le profil</button>
                         </div>
                     </div>
                 </div>
+                {/* Row 3 */}
                 <div>
-                    <div className='grid grid-cols-card-info'>
+                    <div className='grid grid-cols-card-info h-auto'>
                         {/* Column 1 */}
                         <div>
                             <h3 className='font-bold'>Description</h3>
@@ -85,7 +108,7 @@ const MissionCard = ({ missionId }) => {
                 </div>
             </div>
             <div className='flex justify-center mt-8'>
-                <div className='flex space-x-4 max-w-sm w-full'>
+                <div className='flex space-x-4 max-w-sm w-full my-4'>
                     <button onClick={handleContact} className='bg-off-white border-orange-dark border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'>
                         Contacter
                     </button>
@@ -98,9 +121,12 @@ const MissionCard = ({ missionId }) => {
                     </button>
                 </div>
             </div>
+            <div>
+                <p>Misssions dans la même ville</p>
+                <MissionList missions={missions} />
+            </div>
         </div>
     )
 }
-//TODO: missions similaires
 
 export default MissionCard
