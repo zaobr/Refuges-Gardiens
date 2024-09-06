@@ -64,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: '/user/:userId',
         element: <ProfilePage />
+      },
+      {
+        path: '/403',
+        element: <UnauthorizedPage />
       }
     ]
   }

@@ -15,11 +15,47 @@ export class MissionService {
         private readonly organizationRepository: Repository<Organization>,
     ) { }
 
-    async getMissions(): Promise<Mission[]> {
-        return await this.missionRepository.find({
-            select: ['id', 'title', 'city']
-        });
+    async getMissions(filters: { keyword?: string; city?: string; date?: string; organization_id?: number; excludeMissionId?: number; }, limit?: number): Promise<Mission[]> {
+        const query = this.missionRepository.createQueryBuilder('mission');
+        // Apply default condition
+        query.andWhere('mission.isDone = :isDone', { isDone: 0 });
+    
+        // Conditionally apply filters
+        if (filters.keyword) {
+            query.andWhere('(mission.title LIKE :keyword OR mission.description LIKE :keyword)', { keyword: `%${filters.keyword}%` });
+        }
+    
+        if (filters.city) {
+            query.andWhere('mission.city = :city', { city: filters.city });
+        }
+    
+        if (filters.date) {
+            query.andWhere('mission.deadline = :date', { date: filters.date });
+        }
+    
+        if (filters.organization_id) {
+            query.andWhere('mission.organization_id = :organization_id', { organization_id: filters.organization_id });
+        }
+    
+        if (filters.excludeMissionId) {
+            query.andWhere('mission.id != :excludeMissionId', { excludeMissionId: filters.excludeMissionId });
+        }
+    
+        // Apply limit with default value
+        query.limit(limit ?? 10); // Default limit is 10 if limit is not provided
+    
+        // Select specific fields
+        query.select(['mission.id', 'mission.title', 'mission.city', 'mission.description', 'mission.volunteerNumber', 'mission.deadline', 'mission.picture', 'mission.createdAt']);
+    
+        // Execute the query
+        const missions = await query.getMany();
+        console.log(missions);
+        console.log('SQL Query:', query.getSql());
+        return missions;
     }
+    
+    
+    
 
     async getMissionById(id: number): Promise<Mission> {
         return await this.missionRepository.findOne({
