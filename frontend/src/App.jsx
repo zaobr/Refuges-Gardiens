@@ -4,12 +4,13 @@ import "./styles/Dispo.css"
 import "./styles/index.css";
 import NavBarInscription from "./components/NavBarInscription";
 import Dispo from "./components/Dispo";
+import Annonces from "./components/Annonces";
 
 function App (){
   return (
     <>
     <NavBarInscription />
-    <Dispo />
+    <Annonces />
     
     </>
   );
