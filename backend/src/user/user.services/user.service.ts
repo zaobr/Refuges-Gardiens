@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateDescription } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from '../user.entities/user.entity';
 import { CreateUserDto } from '../user.dto/create-user.dto';
 import { UpdateUserDto } from '../user.dto/update-user.dto';
@@ -29,7 +29,7 @@ export class UserService {
   async getUserById(id: number): Promise<User | undefined> {
     return await this.usersRepository.findOne({ 
       select: ['id', 'firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phoneNumber', 'description', 'organizationName', 'isAdmin', 'isOrganization'],
-      where: [{id: id}] 
+      where: [{ id: id }] 
     });
   }
 
@@ -40,13 +40,19 @@ export class UserService {
   async getUserByEmail(email: string): Promise<User | undefined> {
     const user = await this.usersRepository.createQueryBuilder('user')
     .addSelect('user.hashedPassword')
-    .where('user.email = email', {email})
+    .addSelect('user.resetPasswordToken')
+    .where('user.email = :email', {email})
     .getOne();
 
     if (!user) {
       return undefined
     }
     return user
+  }
+
+  async verifyIfEmailExists(email:string): Promise<boolean> {
+    const existingUser = await this.usersRepository.findOne({select: ['email'], where:{email}});
+    return !!existingUser; 
   }
 
   saveUser(user: CreateUserDto): Promise<CreateUserDto> {

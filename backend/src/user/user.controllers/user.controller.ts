@@ -5,7 +5,8 @@ import {
     Put,
     Delete,
     Param,
-    UseGuards
+    UseGuards,
+    Query
   } from '@nestjs/common';
 import { User } from "../user.entities/user.entity";
 import { UserService } from "../user.services/user.service";
@@ -15,6 +16,12 @@ import { UpdateUserDto } from '../user.dto/update-user.dto';
 @Controller('user')
 export class UserController {
     constructor(private service: UserService) {}
+
+    @Get('check-email')
+    async checkIfEmailExists(@Query('email') email: string): Promise<{ exists: boolean }> {
+        const exists = await this.service.verifyIfEmailExists(email);
+        return { exists };
+    }
 
     @Get(':id')
     get(@Param('id') id: number): Promise<User> {

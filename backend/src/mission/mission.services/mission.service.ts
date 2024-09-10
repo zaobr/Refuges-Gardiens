@@ -49,8 +49,6 @@ export class MissionService {
     
         // Execute the query
         const missions = await query.getMany();
-        console.log(missions);
-        console.log('SQL Query:', query.getSql());
         return missions;
     }
     

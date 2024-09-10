@@ -50,7 +50,7 @@ export class AuthService {
                 }
             } else {
                 console.error('Password does not match for user:', email);
-                return { message: 'Incorrect password' };
+                return { message: 'Incorrect password or invalid email' };
             }
         } catch (error) {
             console.error('Failed to login user:', error)
@@ -58,7 +58,13 @@ export class AuthService {
 
     }
 
-    public async register(firstname: string, lastname: string, email: string, password: string): Promise<Partial<User>> {
+    public async register(firstname: string,
+        lastname: string,
+        email: string,
+        password: string,
+        organizationName?: string,
+        isOrganization?: boolean
+    ): Promise<Partial<User>> {
         try {
             const existingUser = await this.userService.getUserByEmail(email);
             if (existingUser) {
@@ -71,6 +77,8 @@ export class AuthService {
             user.lastname = lastname;
             user.email = email;
             user.hashedPassword = hashedPassword;
+            user.organizationName = organizationName;
+            user.isOrganization = isOrganization;
 
             //ce return est facultatif, il est utile pour donner des infos au client, ou les réutiliser
             //directement sans query la database, donc on peut s'en passer si nécessaire
@@ -102,7 +110,6 @@ export class AuthService {
 
     async validateResetToken(resetToken: string, email: string): Promise<Partial<User>> {
         const user = await this.userService.getUserByEmail(email);
-
         if (!user) {
             throw new Error('No valid user');
         }

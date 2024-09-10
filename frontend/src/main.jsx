@@ -16,6 +16,8 @@ import MissionSearchPage from './pages/MissionSearchPage.jsx'
 import MissionCreationPage from './pages/MissionCreationPage.jsx'
 import MissionPage from './pages/MissionPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
+import UnauthorizedPage from './pages/UnauthorizedPage.jsx'
+import ResetPasswordPage from "./pages/ResetPasswordPage.jsx"
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: '/forgot-password',
         element: <ForgotPasswordPage/>
+      },
+      {
+        path: '/reset-password',
+        element: <ResetPasswordPage/>
       },
       {
         path: '/contact',

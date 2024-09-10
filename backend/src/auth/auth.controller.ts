@@ -19,17 +19,17 @@ export class AuthController {
         const { email, password } = LoginDto;
         const result = await this.authService.login(email, password);
 
-        if (result.status && result.status === 404) {
+        if (result.status === 404) {
             return { message: result.message || 'Login failed' };
         }
 
-        return { data: result };
+        return { result };
     }
 
     @Post('register')
     async register(@Body() registerDto: RegisterDto): Promise<any> {
-        const { firstname, lastname, email, password } = registerDto;
-        return this.authService.register(firstname, lastname, email, password);
+        const { firstname, lastname, email, password, organizationName, isOrganization } = registerDto;
+        return this.authService.register(firstname, lastname, email, password, organizationName, isOrganization);
     }
 
     @Post('forgot-password')

@@ -17,7 +17,7 @@ export default function RegisterPage() {
         <>
             <div className="w-full h-full flex flex-col justify-center items-center">
                 <div className='flex flex-col justify-center items-center mb-[50px] p-[25px] w-[90%] shadow-md'>
-                    <h2 className="font-bold text-title text-xl mb-5">Inscription pour ?</h2>
+                    <h2 className="font-bold text-title text-xl mb-5">Inscription</h2>
                     <div className='flex flex-col justify-center items-center'>
                         <button className="w-full mx-[10px] mb-[10px] px-6 py-3 font-bold cursor-pointer bg-orange-dark text-white rounded-lg shadow-md" onClick={handleClickAsso}>Je suis une association</button>
                         <button className="w-full mx-[10px] mb-[10px] px-6 py-3 font-bold cursor-pointer bg-orange-dark text-white rounded-lg shadow-md"onClick={handleClickUser}>Je suis un particulier</button>
