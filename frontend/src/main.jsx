@@ -3,6 +3,7 @@ import "./styles/App.css"
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { UserProvider } from "./contexts/userContext.jsx"
 
 import App from './App.jsx'
 import LoginPage from './pages/LoginPage.jsx'
@@ -17,7 +18,8 @@ import MissionCreationPage from './pages/MissionCreationPage.jsx'
 import MissionPage from './pages/MissionPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 import UnauthorizedPage from './pages/UnauthorizedPage.jsx'
-import ResetPasswordPage from "./pages/ResetPasswordPage.jsx"
+import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
+import MissionEditionPage from './pages/MissionEditionPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -45,15 +47,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/forgot-password',
-        element: <ForgotPasswordPage/>
+        element: <ForgotPasswordPage />
       },
       {
         path: '/reset-password',
-        element: <ResetPasswordPage/>
+        element: <ResetPasswordPage />
       },
       {
         path: '/contact',
-        element: <ContactPage/>
+        element: <ContactPage />
       },
       {
         path: '/mission',
@@ -68,6 +70,10 @@ const router = createBrowserRouter([
         element: <MissionPage />
       },
       {
+        path: '/mission/:missionId/edition',
+        element: <MissionEditionPage />
+      },
+      {
         path: '/user/:userId',
         element: <ProfilePage />
       },
@@ -80,5 +86,7 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+  <UserProvider>
+    <RouterProvider router={router} />
+  </UserProvider>
 )

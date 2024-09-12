@@ -33,10 +33,6 @@ export class UserService {
     });
   }
 
-  // async getUserByEmail(email: string): Promise<User | undefined> {
-  //   return this.usersRepository.findOneBy({ email: email });
-  // }
-
   async getUserByEmail(email: string): Promise<User | undefined> {
     const user = await this.usersRepository.createQueryBuilder('user')
     .addSelect('user.hashedPassword')
@@ -55,8 +51,15 @@ export class UserService {
     return !!existingUser; 
   }
 
-  saveUser(user: CreateUserDto): Promise<CreateUserDto> {
-    return this.usersRepository.save(user);
+    async saveUser(createUserDto: CreateUserDto): Promise<User> {
+      // Create an actual User entity from the DTO
+      const newUser = this.usersRepository.create(createUserDto);
+      
+      // Save the user in the database, this will generate the id
+      const savedUser = await this.usersRepository.save(newUser);
+  
+      // Now `savedUser` will have an id
+      return savedUser;
   }
 
   async updateUser(id: number, updateUser: UpdateUserDto): Promise<UpdateUserDto> {

@@ -6,13 +6,17 @@ import {
     Put,
     Delete,
     Param,
-    Query
+    Query,
+    Req,
+    ForbiddenException
 } from '@nestjs/common';
 import { Mission } from '../mission.entities/mission.entity'
 import { MissionService } from '../mission.services/mission.service';
 import { CreateMissionDto } from '../mission.dto/create-mission.dto';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
+import { User } from 'src/user/user.entities/user.entity';
 
 @Controller('mission')
 export class MissionController {
@@ -44,7 +48,14 @@ export class MissionController {
 
     @UseGuards(AuthGuard('jwt'))
     @Put(':id')
-    update(@Param('id') id: number, @Body() mission: Mission) {
+    update(@Param('id') id: number, @Body() mission: Mission, @Req() request: Request) {
+        let user: Partial<User> = request.user; // Récupère l'id de l'utilisateur de la request
+        let userMission: number = mission.organization.user.id; // Récupère l'id de l'utilisateur de la mission
+
+        if (user.id !== userMission) {
+            throw new ForbiddenException("You don't have permission to update this mission")
+        }
+
         return this.service.updateMission(id, mission);
     }
 
