@@ -1,4 +1,3 @@
-import Home from '../components/Home'
 import MissionsTop from '../components/MissionsTop'
 import SponsorShipTop from '../components/SponsorShipTop'
 
@@ -9,6 +8,5 @@ export default function HomePage() {
             <SponsorShipTop/>
             <MissionsTop/>
         </>
-        // <Home/>
     )
 }
