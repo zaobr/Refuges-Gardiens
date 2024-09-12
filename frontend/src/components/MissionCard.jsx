@@ -1,19 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { formatDate } from "../utils/dateFormatUtils";
 import { FaShare } from "react-icons/fa";
 import MissionList from "./MissionList";
+import Cookies from 'universal-cookie';
 
-const MissionCard = ({ missionId }) => {
+function MissionCard() {
+    const { missionId } = useParams();
     const [mission, setMission] = useState();
     const navigate = useNavigate();
     const [missions, setMissions] = useState([]);
+    const [isCreator, setIsCreator] = useState(false);
+    const url = import.meta.env.VITE_API_URL
 
     useEffect(() => {
         const fetchMissionDetails = async () => {
             try {
-                const url = import.meta.env.VITE_API_URL
                 const response = await axios.get(`${url}/mission/${missionId}`);
                 setMission(response.data);
             } catch (error) {
@@ -27,7 +30,6 @@ const MissionCard = ({ missionId }) => {
         if (mission && mission.city) {
             const fetchMoreMissions = async () => {
                 try {
-                    const url = import.meta.env.VITE_API_URL;
                     const response = await axios.get(`${url}/mission`, {
                         params: { city: mission.city, limit: 10, excludeMissionId: Number(missionId) }
                     });
@@ -51,11 +53,28 @@ const MissionCard = ({ missionId }) => {
         window.location.href = `mailto:${email}?subject=${subject}`;
     };
 
+    const handleEditing = () => {
+        navigate(`edition`)
+    }
+
+    useEffect(() => {
+       if (mission) {
+            const cookie = new Cookies();
+        const userId = cookie.get('userId');
+
+        const missionCreator = mission.organization.user.id
+        console.log(userId, missionCreator)
+        if (userId === missionCreator) {
+            setIsCreator(true)
+        }
+    }
+
+    }, [mission])
+
     //TODO: handlePostuler pour bouton postuler
     //TODO: same with partager
-    //TODO: Fonction pour modifier la page quand on en est le créateur
 
-    if (!mission) return <div>Loading...</div>
+    if (!mission) return <div>Chargement...</div>
 
     return (
         <div className='grid gap-4 mr-2 ml-2'>
@@ -72,7 +91,13 @@ const MissionCard = ({ missionId }) => {
                         <p className='text-sm'>Posté le {formatDate(mission.createdAt)}</p>
                     </div>
                     {/* Column 2 */}
-                    <div></div>
+                    <div className="flex items-center justify-center">
+                       {isCreator && (<button 
+                       onClick={handleEditing}
+                       className="bg-orange-dark border-orange-dark max-w-28 px-3 font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex">
+                        Modifier
+                        </button>)}
+                    </div>
                     {/* Column 3 */}
                     <div className='grid grid-cols-2'>
                         <div className="content-center flex justify-end">

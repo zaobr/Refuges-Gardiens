@@ -1,30 +1,32 @@
-import axios, { formToJSON } from "axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { jwtDecode } from "jwt-decode";
 import Cookies from 'universal-cookie';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-
-const cookies = new Cookies();
-
-function MissionCreation() {
+function MissionEdition() {
+    const { missionId } = useParams();
     const [formData, setFormData] = useState({
-        title: undefined,
-        picture: undefined,
-        numberOfHours: undefined,
-        deadline: undefined,
-        volunteerNumber: undefined,
-        description: undefined,
-        category: undefined,
-        city: undefined,
-        organization: undefined,
+        title: '',
+        picture: '',
+        numberOfHours: '',
+        deadline: '',
+        volunteerNumber: '',
+        description: '',
+        category: '',
+        city: '',
+        organization: '',
     });
     const [user, setUser] = useState([]);
     const navigate = useNavigate();
-    const [newMission, setNewMission] = useState(undefined);
+    const [newMission, setNewMission] = useState(false);
+    const cookies = new Cookies();
 
-    //useEffect pour fetch l'utilisateur connecté 
+    const [mission, setMission] = useState();
+
+    const url = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -32,7 +34,6 @@ function MissionCreation() {
                 if (token) {
                     const decodedToken = jwtDecode(token);
                     const userId = decodedToken.id;
-                    const url = import.meta.env.VITE_API_URL;
                     const response = await axios.get(`${url}/user/${userId}`);
                     const user = response.data;
 
@@ -44,7 +45,6 @@ function MissionCreation() {
                     }
                 } else {
                     console.error('No Token provided');
-                    navigate('/403');
                 }
             } catch (error) {
                 console.error('Error fetching connected user', error);
@@ -53,18 +53,30 @@ function MissionCreation() {
         fetchUserDetails();
     }, []);
 
-    useEffect(() => { //récupération de l'id de l'organization
-        const fetchUserOrganization = async () => {
-            const url = import.meta.env.VITE_API_URL;
-            const response = await axios.get(`${url}/organization/${user.id}`);
-            const organizationId = response.data.id;
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                organization: organizationId
-            }))
-        }
-        fetchUserOrganization();
-    }, [user])
+    // récupération des infos de la mission à modifier
+    useEffect(() => {
+        const fetchMissionDetails = async () => {
+            try {
+                const response = await axios.get(`${url}/mission/${missionId}`);
+                const missionData = response.data
+                setMission(missionData);
+                setFormData({
+                    title: missionData.title || '',
+                    picture: missionData.picture || '',
+                    numberOfHours: missionData.numberOfHours || '',
+                    deadline: missionData.deadline || '',
+                    volunteerNumber: missionData.volunteerNumber || '',
+                    description: missionData.description || '',
+                    category: missionData.category || '',
+                    city: missionData.city || '',
+                    organization: missionData.organization || '',
+                })
+            } catch (error) {
+                console.error("Error fetching mission details:", error);
+            }
+        };
+        fetchMissionDetails();
+    }, [missionId]);
 
     const handleChange = (e) => {
         setFormData({
@@ -83,26 +95,30 @@ function MissionCreation() {
         });
     };
 
+    const handleCancel = () => {
+        navigate(`/mission/${missionId}`)
+    }
+
     const handleConfirm = async (e) => {
         e.preventDefault();
         try {
 
             const loginCookie = cookies.get('userLogin')
             const url = import.meta.env.VITE_API_URL
-            const response = await axios.post(`${url}/mission`, formData, {
+            const response = await axios.put(`${url}/mission/${missionId}`, formData, {
                 headers: { 'Authorization': `Bearer ${loginCookie}` }
             })
 
-            //si mission créée enregistre la nouvelle mission pour afficher la popup et récupérer son id
-            if (response.status === 201) {
-                setNewMission(response.data)
+            //si mission modifiée enregistre la nouvelle mission pour afficher la popup et récupérer son id
+            if (response.status === 200) {
+                setNewMission(true)
             }
         } catch (error) {
-            console.error('Error creating mission', error)
+            console.error('Error editing mission', error)
         }
     }
 
-    //après création, voir son profil
+    //après modification, voir son profil
     const handleSeeProfile = () => {
         try {
             navigate(`/user/${user.id}`)
@@ -111,9 +127,9 @@ function MissionCreation() {
         }
     }
 
-    //après création, voir la nouvelle mission
+    //après modification, voir la nouvelle mission
     const handleSeeMission = () => {
-        navigate(`/mission/${newMission.id}`)
+        navigate(`/mission/${missionId}`)
     }
 
     return (
@@ -141,10 +157,10 @@ function MissionCreation() {
             <div>
                 <form>
                     <div>
-                        <h2 className="text-center font-bold">Création de mission</h2>
+                        <h2 className="text-center font-bold">Modification de mission</h2>
                         <div className="text-center m-3 font-bold">
                             <label>Titre:
-                                <input type="text" name="title" onChange={handleChange} className="border ml-2 rounded-md border-orange-dark" value={formData.title}/>
+                                <input type="text" name="title" onChange={handleChange} className="border pl-1 ml-2 rounded-md border-orange-dark" value={formData.title} />
                             </label>
                         </div>
                         <div>
@@ -158,10 +174,10 @@ function MissionCreation() {
                             <div className="grid grid-cols-card-info m-1">
                                 <div>
                                     <label>Nombre d'heures
-                                        <input type="number" name="numberOfHours" onChange={handleChangeNumber} value={formData.numberOfHours} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="numberOfHours" onChange={handleChangeNumber} value={formData.numberOfHours} className="border block pl-1 w-28 rounded-md border-orange-dark" />
                                     </label>
                                     <label>Besoin de bénévoles
-                                        <input type="number" name="volunteerNumber" min={1} onChange={handleChangeNumber} value={formData.volunteerNumber} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="volunteerNumber" min={1} onChange={handleChangeNumber} value={formData.volunteerNumber} className="border block pl-1 w-28 rounded-md border-orange-dark" />
                                     </label>
                                     <label>Catégorie
                                         <select name="category" onChange={handleChange} value={formData.category} className="border block w-28 rounded-md border-orange-dark">
@@ -176,10 +192,10 @@ function MissionCreation() {
                                 <div></div>
                                 <div>
                                     <label>Ville
-                                        <input type="text" name="city" onChange={handleChange} value={formData.city} className="border block rounded-md border-orange-dark" />
+                                        <input type="text" name="city" onChange={handleChange} value={formData.city} className="border block pl-1 rounded-md border-orange-dark" />
                                     </label>
                                     <label>Date
-                                        <input type="date" name="deadline" onChange={handleChange}  value={formData.deadline} className="border block rounded-md border-orange-dark" />
+                                        <input type="date" name="deadline" onChange={handleChange} value={formData.deadline} className="border block pl-1 rounded-md border-orange-dark" />
                                     </label>
                                 </div>
                             </div>
@@ -187,18 +203,18 @@ function MissionCreation() {
                         <div>
                             <h3 className="font-bold ml-1">Description</h3>
                             <div className="flex justify-center">
-                                <textarea name="description" onChange={handleChange} value={formData.description} className="border block rounded-md border-orange-dark m-1 h-32 w-5/6" />
+                                <textarea name="description" onChange={handleChange} value={formData.description} className="border block pl-1 rounded-md border-orange-dark m-1 h-32 w-5/6" />
                             </div>
                         </div>
                         <div className="flex justify-center">
                             <div className="flex space-x-4 mt-3 max-w-sm w-full">
-                                <button onClick={handleSeeProfile}
+                                <button onClick={handleCancel}
                                     className='bg-off-white border-orange-dark border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex ml-1'>
                                     Annuler
                                 </button>
                                 <button onClick={handleConfirm}
                                     className='bg-orange-dark border-orange-dark font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex mr-1'>
-                                    Poster
+                                    Confirmer
                                 </button>
                             </div>
                         </div>
@@ -208,7 +224,7 @@ function MissionCreation() {
             {newMission && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm">
-                        <p className="text-center text-lg font-semibold">Mission créée avec succès !</p>
+                        <p className="text-center text-lg font-semibold">Mission modifiée avec succès !</p>
                         <div className="flex mt-3 gap-3">
                             <button className="bg-orange-dark border-orange-dark font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex"
                                 onClick={handleSeeMission}
@@ -226,4 +242,4 @@ function MissionCreation() {
     )
 }
 
-export default MissionCreation
+export default MissionEdition

@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { HashingService } from './hashing.service';
 import { CreateUserDto } from '../user/user.dto/create-user.dto';
 import { ResetTokenService } from './reset-token.service';
+import { OrganizationService } from 'src/organization/organization.services/organization.service';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly hashingService: HashingService,
         private readonly resetTokenService: ResetTokenService,
+        private readonly organizationService: OrganizationService,
     ) { }
 
     public async validateToken(id: number): Promise<Partial<User>> {
@@ -43,10 +45,12 @@ export class AuthService {
                 // user found
                 const payload = { id: user.id };
                 const accessToken = this.jwtService.sign(payload);
+                const userInfo = { userId: user.id, isOrganization: user.isOrganization };
 
                 return {
                     expires_in: 3600, // 1heure
                     access_token: accessToken,
+                    userInfo
                 }
             } else {
                 console.error('Password does not match for user:', email);
@@ -55,7 +59,6 @@ export class AuthService {
         } catch (error) {
             console.error('Failed to login user:', error)
         }
-
     }
 
     public async register(firstname: string,
@@ -66,7 +69,7 @@ export class AuthService {
         isOrganization?: boolean
     ): Promise<Partial<User>> {
         try {
-            const existingUser = await this.userService.getUserByEmail(email);
+            const existingUser = await this.userService.verifyIfEmailExists(email);
             if (existingUser) {
                 throw new Error('Email already taken')
             }
@@ -78,16 +81,19 @@ export class AuthService {
             user.email = email;
             user.hashedPassword = hashedPassword;
             user.organizationName = organizationName;
-            user.isOrganization = isOrganization;
+            user.isOrganization = isOrganization ?? false
 
-            //ce return est facultatif, il est utile pour donner des infos au client, ou les réutiliser
-            //directement sans query la database, donc on peut s'en passer si nécessaire
             const savedUser = await this.userService.saveUser(user);
-            return {
-                firstname: savedUser.firstname,
-                lastname: savedUser.lastname,
-                email: savedUser.email,
+
+            if (isOrganization && organizationName) {
+                const createOrganizationDto = {
+                    userId: savedUser.id,
+                    isVerified: false
+                };
+    
+                await this.organizationService.saveOrganization(createOrganizationDto);
             }
+            return 
         } catch (error) {
             console.error('Registration failed:', error.message);
             if (error.message === 'Email already taken') {

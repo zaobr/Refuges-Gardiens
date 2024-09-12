@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { useNavigate } from "react-router-dom";
 
 
 function Login() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -12,16 +13,15 @@ function Login() {
     const [error, setError] = useState({
         status: false,
         message: ''
-    }) 
+    })
 
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
-        setError({status: false})
+        setError({ status: false })
     };
 
     const handleCancel = () => {
@@ -42,11 +42,17 @@ function Login() {
                 return;
             } else {
 
-            const accessToken = response.data.result.access_token;
-            const cookies = new Cookies(null, { path: '/' });
-            cookies.set('userLogin', accessToken);
-            navigate('/');
-        }
+                const accessToken = response.data.result.access_token;
+                const userId = response.data.result.userInfo.userId;
+                const isOrganization = response.data.result.userInfo.isOrganization;
+                const cookies = new Cookies(null, { path: '/' });
+
+                cookies.set('userLogin', accessToken);
+                cookies.set('userId', userId);
+                cookies.set('isOrganization', isOrganization);
+
+                navigate('/');
+            }
         } catch (err) {
             console.error('Error:', err);
         }
@@ -68,7 +74,7 @@ function Login() {
                 </div>
             </form>
             {error.status && error.message ?
-            <p className="text-red-500">{error.message}</p> : ''}
+                <p className="text-red-500">{error.message}</p> : ''}
             <div className="font-bold underline hover:text-orange-dark mt-[25px] mb-[20px]">
                 <a href="/forgot-password">Mot de passe oublié</a>
             </div>
