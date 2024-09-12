@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/userContext";
 
 
 function Login() {
@@ -14,6 +15,8 @@ function Login() {
         status: false,
         message: ''
     })
+
+    const { setUser } = useContext(UserContext);
 
 
     const handleChange = (e) => {
@@ -45,11 +48,14 @@ function Login() {
                 const accessToken = response.data.result.access_token;
                 const userId = response.data.result.userInfo.userId;
                 const isOrganization = response.data.result.userInfo.isOrganization;
-                const cookies = new Cookies(null, { path: '/' });
+                const cookies = new Cookies(null, { path: '/', maxAge: 3600 });
 
                 cookies.set('userLogin', accessToken);
                 cookies.set('userId', userId);
                 cookies.set('isOrganization', isOrganization);
+
+                const userResponse = await axios.get(`${url}/user/${userId}`);
+                setUser(userResponse.data);
 
                 navigate('/');
             }
