@@ -42,7 +42,6 @@ export class DisponibilityService {
 
   async updateDisponibility(id: number, updateDisponibility: Partial<Disponibility>): Promise<Disponibility> {
     const disponibility = await this.disponibilitiesRepository.findOne({ where: { id: Number(id) } });
-    console.log (`id-put = ${id}`);
     if (!disponibility) {
       throw new NotFoundException(`Disponibility with ID ${id} not found`);
     }
