@@ -9,6 +9,10 @@ import { AuthService } from './auth.service';
 import { UserService } from 'src/user/user.services/user.service';
 import { User } from 'src/user/user.entities/user.entity';
 import { JwtStrategy } from './jwt.strategy';
+import { ResetTokenService } from './reset-token.service';
+import { MailerService } from 'src/mailer/mailer.service';
+import { OrganizationService } from 'src/organization/organization.services/organization.service';
+import { Organization } from 'src/organization/organization.entities/organization.entity';
 
 @Module({
   imports: [
@@ -22,8 +26,9 @@ import { JwtStrategy } from './jwt.strategy';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Organization])
   ],
-  providers: [HashingService, AuthService, UserService, JwtStrategy],
+  providers: [HashingService, AuthService, UserService, JwtStrategy, ResetTokenService, MailerService, OrganizationService],
   controllers: [AuthController],
   exports: [HashingService],
 })

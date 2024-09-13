@@ -2,10 +2,12 @@ import Navbar from './Navbar'
 
 function Header() {
     return (
-        <>
-        <h1>Refuge & Gardiens</h1>
-        <Navbar/>
-        </>
+        <header className=''>
+            <div className="app-icon">
+                <h1>Refuge & Gardiens</h1>
+            </div>
+            <Navbar/>
+        </header>
     )
 }
 
