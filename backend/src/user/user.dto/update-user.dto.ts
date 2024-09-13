@@ -19,11 +19,11 @@ export class UpdateUserDto {
 
     @IsOptional()
     @IsString()
-    readonly picture?: string;
+    picture?: string;
 
     @IsOptional()
     @IsString()
-    readonly banner?: string;
+    banner?: string;
 
     @IsOptional()
     @IsString()
