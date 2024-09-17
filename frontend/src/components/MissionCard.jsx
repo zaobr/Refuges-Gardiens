@@ -63,7 +63,6 @@ function MissionCard() {
         const userId = cookie.get('userId');
 
         const missionCreator = mission.organization.user.id
-        console.log(userId, missionCreator)
         if (userId === missionCreator) {
             setIsCreator(true)
         }
