@@ -1,4 +1,3 @@
-import ContactButton from '../components/ContactButton'
 import Login from '../components/Login'
 import RegisterButton from '../components/RegisterButton'
 
@@ -9,7 +8,6 @@ export default function LoginPage() {
                 <Login/>
                 <RegisterButton/>
             </div>
-            <ContactButton/>
         </>
 
     )

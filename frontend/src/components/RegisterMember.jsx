@@ -73,6 +73,7 @@ function RegisterMember() {
             
         } catch (err) {
             console.error('Error:', err);
+            console.log(err)
             setError(err.response?.data?.message || err.message);
             alert(error)
             setIsLoading(false);
@@ -98,7 +99,7 @@ function RegisterMember() {
                             <input className="rounded-sm  h-[30px] px-[2px] py-0 border-b border-solid border-black/12" type="text" name="password" onChange={handleChange} value={formData.password} />
                         </label>
                         <label className="confirmed-password text-title text-[16px] font-bold flex flex-col">Confirmation du mot de passe
-                            <input className={`rounded-sm h-[30px] px-[2px] pr-[100px] py-0 border-b border-solid ${wrongPassword ? 'border-red-500 bg-red-100' : 'border-black/12'}`} type="password" name="confirmedPassword" onChange={handleChange} value={formData.confirmedPassword} />
+                            <input className={`rounded-sm h-[30px] px-[2px] pr-[100px] py-0 border-b border-solid ${wrongPassword ? 'border-red-500 bg-red-100' : 'border-black/12'}`} type="text" name="confirmedPassword" onChange={handleChange} value={formData.confirmedPassword} />
                         </label>
                         {wrongPassword ? <span className="text-red-500 text-sm pt-0">Les mots de passe ne correspondent pas</span> : ''}
                         <div className="grid grid-cols-[30%_60%] gap-[10%]">

@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom"
-import ContactButton from "../components/ContactButton"
 
 export default function RegisterPage() {
 
@@ -24,7 +23,6 @@ export default function RegisterPage() {
                     </div>
                 </div>
             </div>
-            <ContactButton/>
         </>
     )
 }
