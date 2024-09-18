@@ -29,7 +29,7 @@ function MissionList({ missions }) {
                             onClick={() => handleClickMission(mission.id)}
                             className="bg-off-white hover:bg-orange-light w-full flex flex-row text-xs mb-2"
                         >
-                            <img src={mission.picture} className="w-1/5 object-contain" />
+                            <img src={mission.pictureUrl} className="w-1/5 object-contain" />
                             <div className="flex flex-col px-1 w-full">
                                 <div className="flex w-full justify-between">
                                     <h3 className="font-bold">{mission.title}</h3>

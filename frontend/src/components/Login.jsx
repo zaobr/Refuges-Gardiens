@@ -57,7 +57,7 @@ function Login() {
                 const userResponse = await axios.get(`${url}/user/${userId}`);
                 setUser(userResponse.data);
 
-                navigate('/');
+                navigate(-1);
             }
         } catch (err) {
             console.error('Error:', err);

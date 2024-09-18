@@ -95,7 +95,7 @@ function RegisterMember() {
                         </label>
                         {emailTaken ? <span className="text-red-500 text-sm pt-0">Email déjà utilisé</span> : ''}
                         <label className="password text-title text-[16px] font-bold flex flex-col">Mot de passe
-                            <input className="rounded-sm  h-[30px] px-[2px] py-0 border-b border-solid border-black/12" type="text" name="password" onChange={handleChange} value={formData.password} />
+                            <input className="rounded-sm  h-[30px] px-[2px] py-0 border-b border-solid border-black/12" type="password" name="password" onChange={handleChange} value={formData.password} />
                         </label>
                         <label className="confirmed-password text-title text-[16px] font-bold flex flex-col">Confirmation du mot de passe
                             <input className={`rounded-sm h-[30px] px-[2px] pr-[100px] py-0 border-b border-solid ${wrongPassword ? 'border-red-500 bg-red-100' : 'border-black/12'}`} type="password" name="confirmedPassword" onChange={handleChange} value={formData.confirmedPassword} />

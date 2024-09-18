@@ -63,7 +63,6 @@ function MissionCard() {
         const userId = cookie.get('userId');
 
         const missionCreator = mission.organization.user.id
-        console.log(userId, missionCreator)
         if (userId === missionCreator) {
             setIsCreator(true)
         }
@@ -81,7 +80,7 @@ function MissionCard() {
             <div className='grid gap-4 h-full'>
                 {/* Row 1 */}
                 <div>
-                    <img src={mission.picture} alt={`Photo de ${mission.title}`} className="max-h-60 w-full" />
+                    <img src={mission.pictureUrl} alt={`Photo de ${mission.title}`} className="max-h-60 w-full" />
                 </div>
                 {/* Row 2 */}
                 <div className='grid grid-cols-card-info h-auto'>

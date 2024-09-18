@@ -19,7 +19,6 @@ export class Mission {
   title: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  // si on veut mettre une image par défaut si le user n'en upload pas on peut mettre une defaut.jpg en default value
   picture: string;
 
   @Column({ type: 'text' })

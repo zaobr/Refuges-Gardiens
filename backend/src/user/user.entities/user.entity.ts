@@ -60,7 +60,7 @@ export class User {
     organization: Organization;
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+    createdAt: Date; //changer en timestamp
 
     @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date;
