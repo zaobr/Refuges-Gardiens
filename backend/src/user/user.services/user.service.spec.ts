@@ -59,8 +59,8 @@ describe('UserService', () => {
     expect(hashingService.hash).toHaveBeenCalledWith(plainToken);
     expect(usersRepository.save).toHaveBeenCalledWith({
       ...mockUser,
-      resetPasswordToken: hashedToken,
-      resetPasswordExpires: expect.any(Date),
+      reset_password_token: hashedToken,
+      reset_password_expires: expect.any(Date),
     });
     expect(result).toBe(plainToken);
   });

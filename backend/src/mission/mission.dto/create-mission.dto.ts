@@ -1,4 +1,5 @@
 import { IsDateString, IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator'
+import { Type } from 'class-transformer';
 
 export class CreateMissionDto {
     @IsString()
@@ -19,7 +20,8 @@ export class CreateMissionDto {
 
     @IsNumber()
     @IsNotEmpty()
-    numberOfHours: number;
+    @Type(() => Number)
+    number_of_hours: number;
     
     @IsDateString()
     @IsNotEmpty()
@@ -27,13 +29,14 @@ export class CreateMissionDto {
 
     @IsNotEmpty()
     @IsNumber()
+    @Type(() => Number)
     organization: number; //organization id
 
     @IsOptional()
-    @IsString()
     picture?: string; 
 
     @IsNotEmpty()
     @IsNumber()
-    volunteerNumber: number;
+    @Type(() => Number)
+    volunteer_number: number;
 }

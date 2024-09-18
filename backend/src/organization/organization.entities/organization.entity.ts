@@ -23,14 +23,14 @@ export class Organization {
     user: User;
 
     @Column({ type: 'tinyint', width: 1, default: 0 })
-    isVerified: boolean;
+    is_verified: boolean;
 
     @OneToMany(() => Mission, (mission) => mission.organization)
     missions: Mission[];
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date;
+    updated_at: Date;
 }

@@ -24,7 +24,7 @@ export class User {
     email: string;
 
     @Column({ type: "varchar", length: 255, select: false } )
-    hashedPassword: string;
+    hashed_password: string;
 
     @Column({ type: "varchar", length: 255, default: "" })
     city: string;
@@ -36,32 +36,32 @@ export class User {
     banner: string;
 
     @Column({ type: "varchar", length: 10, default: "" })
-    phoneNumber: string;
+    phone_number: string;
 
     @Column({ type: "text", nullable: true })
     description: string;
 
     @Column({ type: "boolean", default: false })
-    isAdmin: boolean;
+    is_admin: boolean;
 
     @Column({ type: "boolean", default: false })
-    isOrganization: boolean;
+    is_organization: boolean;
 
     @Column({ type: "varchar", length: 255, nullable: true })
-    organizationName: string;
+    organization_name: string;
 
     @Column({ nullable: true, select: false })
-    resetPasswordToken: string;
+    reset_password_token: string;
 
     @Column({ type: 'timestamp', nullable: true })
-    resetPasswordExpires: Date;
+    reset_password_expires: Date;
 
     @OneToOne(() => Organization, (organization) => organization.user)
     organization: Organization;
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+    created_at: Date; //changer en timestamp
 
     @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date;
+    updated_at: Date;
 }

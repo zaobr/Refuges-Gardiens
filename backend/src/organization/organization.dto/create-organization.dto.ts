@@ -6,5 +6,5 @@ export class CreateOrganizationDto {
 
     @IsOptional()
     @IsBoolean()
-    isVerified?: boolean;
+    is_verified?: boolean;
 }

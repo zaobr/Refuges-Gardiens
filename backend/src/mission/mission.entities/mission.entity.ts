@@ -19,7 +19,6 @@ export class Mission {
   title: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  // si on veut mettre une image par défaut si le user n'en upload pas on peut mettre une defaut.jpg en default value
   picture: string;
 
   @Column({ type: 'text' })
@@ -35,13 +34,13 @@ export class Mission {
   deadline: Date;
 
   @Column({ type: 'int' })
-  numberOfHours: number;
+  number_of_hours: number;
 
   @Column({ type: 'int' })
-  volunteerNumber: number;
+  volunteer_number: number;
 
   @Column({ type: 'tinyint', width: 1, default: 0 })
-  isDone: boolean;
+  is_done: boolean;
 
   @Index()
   @ManyToOne(() => Organization, (organization) => organization.missions)
@@ -49,9 +48,9 @@ export class Mission {
   organization: Organization;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  updated_at: Date;
 
 }

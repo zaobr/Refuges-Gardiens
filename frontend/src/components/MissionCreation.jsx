@@ -1,28 +1,32 @@
 import axios, { formToJSON } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { jwtDecode } from "jwt-decode";
 import Cookies from 'universal-cookie';
 import { useNavigate } from "react-router-dom";
+import { ImCross } from "react-icons/im";
+
 
 
 const cookies = new Cookies();
 
 function MissionCreation() {
     const [formData, setFormData] = useState({
-        title: undefined,
-        picture: undefined,
-        numberOfHours: undefined,
-        deadline: undefined,
-        volunteerNumber: undefined,
-        description: undefined,
-        category: undefined,
-        city: undefined,
-        organization: undefined,
+        title: '',
+        picture: '',
+        number_of_hours: '',
+        deadline: '',
+        volunteer_number: '',
+        description: '',
+        category: '',
+        city: '',
+        organization: '',
     });
     const [user, setUser] = useState([]);
     const navigate = useNavigate();
     const [newMission, setNewMission] = useState(undefined);
+    const fileInputRef = useRef(null);
+    const [preview, setPreview] = useState(null);
 
     //useEffect pour fetch l'utilisateur connecté 
     useEffect(() => {
@@ -36,7 +40,7 @@ function MissionCreation() {
                     const response = await axios.get(`${url}/user/${userId}`);
                     const user = response.data;
 
-                    if (user && !user.isOrganization) {
+                    if (user && !user.is_organization) {
                         navigate('/403');
 
                     } else {
@@ -81,21 +85,27 @@ function MissionCreation() {
             ...formData,
             [name]: numericValue
         });
+        console.log(formData, typeof(formData.number_of_hours))
     };
 
-    const handleConfirm = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
 
             const loginCookie = cookies.get('userLogin')
             const url = import.meta.env.VITE_API_URL
             const response = await axios.post(`${url}/mission`, formData, {
-                headers: { 'Authorization': `Bearer ${loginCookie}` }
+                headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${loginCookie}` }
             })
+
+            const data = new FormData();
+            if (formData.picture) {
+                data.append('picture', formData.picture);
+            }
 
             //si mission créée enregistre la nouvelle mission pour afficher la popup et récupérer son id
             if (response.status === 201) {
-                setNewMission(response.data)
+                setNewMission(response.data.id)
             }
         } catch (error) {
             console.error('Error creating mission', error)
@@ -109,12 +119,32 @@ function MissionCreation() {
         } catch (error) {
             console.error('Error trying to access user profile', error)
         }
-    }
+    };
 
     //après création, voir la nouvelle mission
     const handleSeeMission = () => {
-        navigate(`/mission/${newMission.id}`)
+        navigate(`/mission/${newMission}`)
+    };
+
+    const handleDivClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setPreview(URL.createObjectURL(file));
+            setFormData({ ...formData, picture: file });
+        }
+    };
+
+    const handleDeletePicture = (e) => {
+        e.preventDefault();
+        setFormData({ ...formData, picture: undefined });
+        setPreview(null);
+        document.getElementById('fileInput').value = '';
     }
+
 
     return (
         <div>
@@ -132,25 +162,39 @@ function MissionCreation() {
                             className="w-16 h-16"
                         />
                         <div className="pr-2">
-                            <h3 className="text-2xl text-right font-bold">{user.organizationName}</h3>
+                            <h3 className="text-2xl text-right font-bold">{user.organization_name}</h3>
                             <p className="text-lg text-right">{user.city}</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div>
-                <form>
+                <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <div>
                         <h2 className="text-center font-bold">Création de mission</h2>
                         <div className="text-center m-3 font-bold">
                             <label>Titre:
-                                <input type="text" name="title" onChange={handleChange} className="border ml-2 rounded-md border-orange-dark" value={formData.title}/>
+                                <input type="text" name="title" onChange={handleChange} className="border ml-2 rounded-md border-orange-dark" value={formData.title} />
                             </label>
                         </div>
                         <div>
                             <h3 className="font-bold ml-1">Photos</h3>
-                            <div>
-                                <div className="border rounded-lg inline-block m-2"><MdOutlineAddAPhoto className="m-4" size={45} /></div>
+                            <div className="flex">
+                                <div onClick={handleDivClick} className="border rounded-lg inline-block m-2 hover:scale-95 transition-transform duration-200 ease-in-out cursor-pointer"><MdOutlineAddAPhoto className="m-4" size={45} />
+                                </div>
+                                <input
+                                    id="fileInput"
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                                {preview && <div className="flex">
+                                    <img src={preview} alt="Preview" className="w-24 h-24 object-cover m-2 mb-0 border rounded-lg" />
+                                    <button onClick={handleDeletePicture}><ImCross />
+                                    </button>
+                                </div>}
                             </div>
                         </div>
                         <div>
@@ -158,10 +202,10 @@ function MissionCreation() {
                             <div className="grid grid-cols-card-info m-1">
                                 <div>
                                     <label>Nombre d'heures
-                                        <input type="number" name="numberOfHours" onChange={handleChangeNumber} value={formData.numberOfHours} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="number_of_hours" onChange={handleChangeNumber} value={formData.number_of_hours} className="border block w-28 rounded-md border-orange-dark" />
                                     </label>
                                     <label>Besoin de bénévoles
-                                        <input type="number" name="volunteerNumber" min={1} onChange={handleChangeNumber} value={formData.volunteerNumber} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="volunteer_number" min={1} onChange={handleChangeNumber} value={formData.volunteer_number} className="border block w-28 rounded-md border-orange-dark" />
                                     </label>
                                     <label>Catégorie
                                         <select name="category" onChange={handleChange} value={formData.category} className="border block w-28 rounded-md border-orange-dark">
@@ -179,7 +223,7 @@ function MissionCreation() {
                                         <input type="text" name="city" onChange={handleChange} value={formData.city} className="border block rounded-md border-orange-dark" />
                                     </label>
                                     <label>Date
-                                        <input type="date" name="deadline" onChange={handleChange}  value={formData.deadline} className="border block rounded-md border-orange-dark" />
+                                        <input type="date" name="deadline" onChange={handleChange} value={formData.deadline} className="border block rounded-md border-orange-dark" />
                                     </label>
                                 </div>
                             </div>
@@ -196,7 +240,7 @@ function MissionCreation() {
                                     className='bg-off-white border-orange-dark border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex ml-1'>
                                     Annuler
                                 </button>
-                                <button onClick={handleConfirm}
+                                <button type="submit"
                                     className='bg-orange-dark border-orange-dark font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex mr-1'>
                                     Poster
                                 </button>

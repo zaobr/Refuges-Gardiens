@@ -19,15 +19,15 @@ export class UpdateUserDto {
 
     @IsOptional()
     @IsString()
-    readonly picture?: string;
+    picture?: string;
 
     @IsOptional()
     @IsString()
-    readonly banner?: string;
+    banner?: string;
 
     @IsOptional()
     @IsString()
-    readonly phoneNumber?: string;
+    readonly phone_number?: string;
 
     @IsOptional()
     @IsString()
@@ -35,13 +35,13 @@ export class UpdateUserDto {
 
     @IsOptional()
     @IsBoolean()
-    readonly isAdmin?: boolean;
+    readonly is_admin?: boolean;
 
     @IsOptional()
     @IsBoolean()
-    readonly isOrganization?: boolean;
+    readonly is_organization?: boolean;
 
     @IsOptional()
     @IsString()
-    readonly organizationName?: string;
+    readonly organization_name?: string;
 }

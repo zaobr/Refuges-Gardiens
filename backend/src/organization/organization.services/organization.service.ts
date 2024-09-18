@@ -32,7 +32,7 @@ export class OrganizationService {
 
         const organizationDto: OrganizationDto = {
             id: organization.id,
-            isVerified: organization.isVerified
+            is_verified: organization.is_verified
         };
 
         return organizationDto;
@@ -41,14 +41,14 @@ export class OrganizationService {
     async getVerifiedOrganization(): Promise<Organization[]> {
         const organizations = await this.organizationRepository
             .find({
-                select: ['id', 'createdAt'],
-                where: {isVerified: true}
+                select: ['id', 'created_at'],
+                where: {is_verified: true}
             });
         return organizations
     }
 
     async saveOrganization(createOrganizationDto: CreateOrganizationDto): Promise<Organization> {
-        const { userId, isVerified } = createOrganizationDto;
+        const { userId, is_verified } = createOrganizationDto;
 
         const user = await this.organizationRepository.manager.findOne(User, { where: { id: userId } });
 
@@ -58,7 +58,7 @@ export class OrganizationService {
 
         const organization = this.organizationRepository.create({
             user,
-            isVerified: isVerified ?? false, // Default to false if not provided
+            is_verified: is_verified ?? false, // Default to false if not provided
         });
 
         return await this.organizationRepository.save(organization);

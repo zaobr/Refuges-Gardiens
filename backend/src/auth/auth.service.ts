@@ -39,13 +39,13 @@ export class AuthService {
                 // User not found
                 return { message: 'User not found' };
             }
-            const match = await this.hashingService.compare(password, user.hashedPassword);
+            const match = await this.hashingService.compare(password, user.hashed_password);
 
             if (match) {
                 // user found
                 const payload = { id: user.id };
                 const accessToken = this.jwtService.sign(payload);
-                const userInfo = { userId: user.id, isOrganization: user.isOrganization };
+                const userInfo = { userId: user.id, is_organization: user.is_organization };
 
                 return {
                     expires_in: 3600, // 1heure
@@ -65,30 +65,30 @@ export class AuthService {
         lastname: string,
         email: string,
         password: string,
-        organizationName?: string,
-        isOrganization?: boolean
+        organization_name?: string,
+        is_organization?: boolean
     ): Promise<Partial<User>> {
         try {
             const existingUser = await this.userService.verifyIfEmailExists(email);
             if (existingUser) {
                 throw new Error('Email already taken')
             }
-            const hashedPassword = await this.hashingService.hash(password);
+            const hashed_password = await this.hashingService.hash(password);
 
             const user = new CreateUserDto();
             user.firstname = firstname;
             user.lastname = lastname;
             user.email = email;
-            user.hashedPassword = hashedPassword;
-            user.organizationName = organizationName;
-            user.isOrganization = isOrganization ?? false
+            user.hashed_password = hashed_password;
+            user.organization_name = organization_name;
+            user.is_organization = is_organization ?? false
 
             const savedUser = await this.userService.saveUser(user);
 
-            if (isOrganization && organizationName) {
+            if (is_organization && organization_name) {
                 const createOrganizationDto = {
                     userId: savedUser.id,
-                    isVerified: false
+                    is_verified: false
                 };
     
                 await this.organizationService.saveOrganization(createOrganizationDto);
@@ -107,8 +107,8 @@ export class AuthService {
 
         const resetToken = await this.resetTokenService.resetTokenGenerator();
 
-        user.resetPasswordToken = resetToken;
-        user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1h
+        user.reset_password_token = resetToken;
+        user.reset_password_expires = new Date(Date.now() + 60 * 60 * 1000); // 1h
 
         await this.userService.saveUser(user);
         return resetToken;
@@ -120,11 +120,11 @@ export class AuthService {
             throw new Error('No valid user');
         }
 
-        if (resetToken !== user.resetPasswordToken) {
+        if (resetToken !== user.reset_password_token) {
             throw new Error('Invalid token');
         }
 
-        if (user.resetPasswordExpires < new Date()) {
+        if (user.reset_password_expires < new Date()) {
             throw new Error('Expired token');
         }
         return user
