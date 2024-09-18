@@ -80,14 +80,14 @@ function MissionCard() {
             <div className='grid gap-4 h-full'>
                 {/* Row 1 */}
                 <div>
-                    <img src={mission.pictureUrl} alt={`Photo de ${mission.title}`} className="max-h-60 w-full" />
+                    <img src={mission.picture_url} alt={`Photo de ${mission.title}`} className="max-h-60 w-full" />
                 </div>
                 {/* Row 2 */}
                 <div className='grid grid-cols-card-info h-auto'>
                     {/* Column 1 */}
                     <div className="content-center">
                         <h2 className='font-bold'>{mission.title}</h2>
-                        <p className='text-sm'>Posté le {formatDate(mission.createdAt)}</p>
+                        <p className='text-sm'>Posté le {formatDate(mission.created_at)}</p>
                     </div>
                     {/* Column 2 */}
                     <div className="flex items-center justify-center">
@@ -100,10 +100,10 @@ function MissionCard() {
                     {/* Column 3 */}
                     <div className='grid grid-cols-2'>
                         <div className="content-center flex justify-end">
-                            <img src={mission.organization.user.picture} alt={`Photo de ${mission.organization.user.organizationName}`} className="h-20" />
+                            <img src={mission.organization.user.picture} alt={`Photo de ${mission.organization.user.organization_name}`} className="h-20" />
                         </div>
                         <div className='content-center'>
-                            <p className='text-left'>{mission.organization.user.organizationName}</p>
+                            <p className='text-left'>{mission.organization.user.organization_name}</p>
                             <button className='text-sm text-center' onClick={handleConsultProfile}>Consulter le profil</button>
                         </div>
                     </div>
@@ -115,7 +115,7 @@ function MissionCard() {
                         <div>
                             <h3 className='font-bold'>Description</h3>
                             <p className='text-sm'>Catégorie: {mission.category}</p>
-                            <p className='text-sm'>Durée: {mission.numberOfHours}h</p>
+                            <p className='text-sm'>Durée: {mission.number_of_hours}h</p>
                         </div>
                         {/* Column 2 */}
                         <div></div>
@@ -127,7 +127,7 @@ function MissionCard() {
                     </div>
                     <div>{mission.description}</div>
                     <div className="flex justify-end">
-                        <p>Besoin de {mission.volunteerNumber == 1 ? '1 bénévole.' : `${mission.volunteerNumber} bénévoles.`}</p>
+                        <p>Besoin de {mission.volunteer_number == 1 ? '1 bénévole.' : `${mission.volunteer_number} bénévoles.`}</p>
                     </div>
                 </div>
             </div>

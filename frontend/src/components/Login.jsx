@@ -47,12 +47,12 @@ function Login() {
 
                 const accessToken = response.data.result.access_token;
                 const userId = response.data.result.userInfo.userId;
-                const isOrganization = response.data.result.userInfo.isOrganization;
+                const is_organization = response.data.result.userInfo.is_organization;
                 const cookies = new Cookies(null, { path: '/', maxAge: 3600 });
 
                 cookies.set('userLogin', accessToken);
                 cookies.set('userId', userId);
-                cookies.set('isOrganization', isOrganization);
+                cookies.set('is_organization', is_organization);
 
                 const userResponse = await axios.get(`${url}/user/${userId}`);
                 setUser(userResponse.data);

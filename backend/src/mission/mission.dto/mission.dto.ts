@@ -4,13 +4,13 @@ export class MissionDto {
     description: string;
     category: string;
     city: string;
-    numberOfHours: number;
+    number_of_hours: number;
     deadline: Date;
     organization: any;
     picture?: string;
-    volunteerNumber: number;
-    pictureUrl?: string;
-    isDone: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    volunteer_number: number;
+    picture_url?: string;
+    is_done: boolean;
+    created_at: Date;
+    updated_at: Date;
 }

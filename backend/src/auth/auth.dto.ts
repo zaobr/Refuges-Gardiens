@@ -8,6 +8,6 @@ export class RegisterDto {
     lastname: string;
     email: string;
     password: string;
-    organizationName?: string;
-    isOrganization?: boolean;
+    organization_name?: string;
+    is_organization?: boolean;
 }

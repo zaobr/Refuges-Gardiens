@@ -8,14 +8,14 @@ export class UserDto{
     city: string;
     picture: string;
     banner: string;
-    phoneNumber: string;
+    phone_number: string;
     description: string;
-    isAdmin: boolean;
-    isOrganization: boolean;
-    organizationName: string;
-    resetPasswordToken: string;
-    resetPasswordExpires: Date;
-    createdAt: Date;
+    is_admin: boolean;
+    is_organization: boolean;
+    organization_name: string;
+    reset_password_token: string;
+    reset_password_expires: Date;
+    created_at: Date;
 
     constructor(user: User) {
         this.id = user.id;
@@ -25,13 +25,13 @@ export class UserDto{
         this.city = user.city;
         this.picture = user.picture;
         this.banner = user.banner;
-        this.phoneNumber = user.phoneNumber;
+        this.phone_number = user.phone_number;
         this.description = user.description;
-        this.isAdmin = user.isAdmin;
-        this.isOrganization = user.isOrganization;
-        this.organizationName = user.organizationName;
-        this.resetPasswordToken = user.resetPasswordToken;
-        this.resetPasswordExpires = user.resetPasswordExpires;
-        this.createdAt = user.createdAt;
+        this.is_admin = user.is_admin;
+        this.is_organization = user.is_organization;
+        this.organization_name = user.organization_name;
+        this.reset_password_token = user.reset_password_token;
+        this.reset_password_expires = user.reset_password_expires;
+        this.created_at = user.created_at;
     }
 }

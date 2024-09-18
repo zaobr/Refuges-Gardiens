@@ -28,8 +28,8 @@ export class AuthController {
 
     @Post('register')
     async register(@Body() registerDto: RegisterDto): Promise<any> {
-        const { firstname, lastname, email, password, organizationName, isOrganization } = registerDto;
-        return this.authService.register(firstname, lastname, email, password, organizationName, isOrganization);
+        const { firstname, lastname, email, password, organization_name, is_organization } = registerDto;
+        return this.authService.register(firstname, lastname, email, password, organization_name, is_organization);
     }
 
     @Post('forgot-password')
@@ -58,12 +58,12 @@ export class AuthController {
     async resetPassword(@Query('token') token: string, @Query('email') email: string, @Body('password') password: string) {
         const user = await this.authService.validateResetToken(token, email)
 
-        const hashedPassword = await this.hashingService.hash(password)
-        user.hashedPassword = hashedPassword
+        const hashed_password = await this.hashingService.hash(password)
+        user.hashed_password = hashed_password
 
         // suppression du token
-        user.resetPasswordToken = null
-        user.resetPasswordExpires = null
+        user.reset_password_token = null
+        user.reset_password_expires = null
         await this.userService.updateUser(user.id, user)
 
         return { message: `Password updated` }

@@ -19,7 +19,7 @@ export class MissionService {
     async getMissions(filters: { keyword?: string; city?: string; date?: string; organization_id?: number; excludeMissionId?: number; }, limit?: number): Promise<MissionDto[]> {
         const query = this.missionRepository.createQueryBuilder('mission');
         // Apply default condition
-        query.andWhere('mission.isDone = :isDone', { isDone: 0 });
+        query.andWhere('mission.is_done = :is_done', { is_done: 0 });
 
         // Conditionally apply filters
         if (filters.keyword) {
@@ -46,17 +46,17 @@ export class MissionService {
         query.limit(limit ?? 10); // Default limit is 10 if limit is not provided
 
         // Select specific fields
-        query.select(['mission.id', 'mission.title', 'mission.city', 'mission.description', 'mission.volunteerNumber', 'mission.deadline', 'mission.picture', 'mission.createdAt']);
+        query.select(['mission.id', 'mission.title', 'mission.city', 'mission.description', 'mission.volunteer_number', 'mission.deadline', 'mission.picture', 'mission.created_at']);
 
         query.select([
             'mission.id',
             'mission.title',
             'mission.city',
             'mission.description',
-            'mission.volunteerNumber',
+            'mission.volunteer_number',
             'mission.deadline',
             'mission.picture',
-            'mission.createdAt'
+            'mission.created_at'
         ]);
 
         // Execute the query
@@ -72,21 +72,21 @@ export class MissionService {
                 title: mission.title,
                 city: mission.city,
                 description: mission.description,
-                volunteerNumber: mission.volunteerNumber,
+                volunteer_number: mission.volunteer_number,
                 deadline: mission.deadline,
-                createdAt: mission.createdAt,
+                created_at: mission.created_at,
                 category: mission.category,
-                numberOfHours: mission.numberOfHours,
+                number_of_hours: mission.number_of_hours,
                 organization: mission.organization,
-                isDone: mission.isDone,
-                updatedAt: mission.updatedAt
+                is_done: mission.is_done,
+                updated_at: mission.updated_at
             };
 
             // If there's a picture, construct the URL
             if (mission.picture) {
-                missionResponse.pictureUrl = `${url}:${port}/uploads/mission/${mission.picture}`;
+                missionResponse.picture_url = `${url}:${port}/uploads/mission/${mission.picture}`;
             } else {
-                missionResponse.pictureUrl = `${url}:${port}/uploads/mission/mission-default.png`;
+                missionResponse.picture_url = `${url}:${port}/uploads/mission/mission-default.png`;
             }
 
             return missionResponse;
@@ -106,22 +106,22 @@ export class MissionService {
         missionResponse.id = mission.id;
         missionResponse.title = mission.title;
         missionResponse.description = mission.description;
-        missionResponse.numberOfHours = mission.numberOfHours;
+        missionResponse.number_of_hours = mission.number_of_hours;
         missionResponse.deadline = mission.deadline;
-        missionResponse.volunteerNumber = mission.volunteerNumber;
+        missionResponse.volunteer_number = mission.volunteer_number;
         missionResponse.category = mission.category;
         missionResponse.city = mission.city;
         missionResponse.organization = mission.organization;
-        missionResponse.isDone = mission.isDone;
-        missionResponse.createdAt = mission.createdAt;
-        missionResponse.updatedAt = mission.updatedAt;
+        missionResponse.is_done = mission.is_done;
+        missionResponse.created_at = mission.created_at;
+        missionResponse.updated_at = mission.updated_at;
 
         const url = process.env.APP_URL;
         const port = process.env.APP_PORT;
         if (mission.picture) {
-            missionResponse.pictureUrl = `${url}:${port}/uploads/mission/${mission.picture}`;
+            missionResponse.picture_url = `${url}:${port}/uploads/mission/${mission.picture}`;
         } else {
-            missionResponse.pictureUrl = `${url}:${port}/uploads/mission/mission-default.png`;
+            missionResponse.picture_url = `${url}:${port}/uploads/mission/mission-default.png`;
         }
 
         return missionResponse;

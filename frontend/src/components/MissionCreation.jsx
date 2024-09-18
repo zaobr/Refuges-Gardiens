@@ -14,9 +14,9 @@ function MissionCreation() {
     const [formData, setFormData] = useState({
         title: '',
         picture: '',
-        numberOfHours: '',
+        number_of_hours: '',
         deadline: '',
-        volunteerNumber: '',
+        volunteer_number: '',
         description: '',
         category: '',
         city: '',
@@ -40,7 +40,7 @@ function MissionCreation() {
                     const response = await axios.get(`${url}/user/${userId}`);
                     const user = response.data;
 
-                    if (user && !user.isOrganization) {
+                    if (user && !user.is_organization) {
                         navigate('/403');
 
                     } else {
@@ -85,7 +85,7 @@ function MissionCreation() {
             ...formData,
             [name]: numericValue
         });
-        console.log(formData, typeof(formData.numberOfHours))
+        console.log(formData, typeof(formData.number_of_hours))
     };
 
     const handleSubmit = async (e) => {
@@ -162,7 +162,7 @@ function MissionCreation() {
                             className="w-16 h-16"
                         />
                         <div className="pr-2">
-                            <h3 className="text-2xl text-right font-bold">{user.organizationName}</h3>
+                            <h3 className="text-2xl text-right font-bold">{user.organization_name}</h3>
                             <p className="text-lg text-right">{user.city}</p>
                         </div>
                     </div>
@@ -202,10 +202,10 @@ function MissionCreation() {
                             <div className="grid grid-cols-card-info m-1">
                                 <div>
                                     <label>Nombre d'heures
-                                        <input type="number" name="numberOfHours" onChange={handleChangeNumber} value={formData.numberOfHours} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="number_of_hours" onChange={handleChangeNumber} value={formData.number_of_hours} className="border block w-28 rounded-md border-orange-dark" />
                                     </label>
                                     <label>Besoin de bénévoles
-                                        <input type="number" name="volunteerNumber" min={1} onChange={handleChangeNumber} value={formData.volunteerNumber} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="volunteer_number" min={1} onChange={handleChangeNumber} value={formData.volunteer_number} className="border block w-28 rounded-md border-orange-dark" />
                                     </label>
                                     <label>Catégorie
                                         <select name="category" onChange={handleChange} value={formData.category} className="border block w-28 rounded-md border-orange-dark">

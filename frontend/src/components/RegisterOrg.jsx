@@ -9,8 +9,8 @@ function RegisterOrg() {
         lastname: '',
         email: '',
         password: '',
-        organizationName: '',
-        isOrganization: true,
+        organization_name: '',
+        is_organization: true,
         confirmedPassword: ''
     });
 
@@ -96,7 +96,7 @@ function RegisterOrg() {
                             <input className="rounded-sm  h-[30px] px-[2px] py-0 border-b border-solid border-black/12" type="text" name="lastname" onChange={handleChange} value={formData.lastname} />
                         </label>
                         <label className="orgname text-title text-[16px] font-bold flex flex-col">Nom de l'association
-                            <input className="rounded-sm h-[30px] px-[2px] py-0 border-b border-solid border-black/12" type="text" name="organizationName" onChange={handleChange} value={formData.orgname} />
+                            <input className="rounded-sm h-[30px] px-[2px] py-0 border-b border-solid border-black/12" type="text" name="organizationName" onChange={handleChange} value={formData.organization_name} />
                         </label>
                         {/* <label className="legalDocs text-title text-[16px] font-bold flex flex-col relative">Extrait du journal officiel
                             <input className="rounded-sm h-[30px] px-[2px] pr-[100px] py-0 border-b border-solid border-black/12" type="text" name="legalDocs" onChange={handleChange} value={formData.legalDocs} />

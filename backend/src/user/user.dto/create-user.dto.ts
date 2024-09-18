@@ -11,7 +11,7 @@ export class CreateUserDto {
 
     @MinLength(6)
     @IsNotEmpty()
-    hashedPassword: string;
+    hashed_password: string;
 
     @IsString()
     @IsNotEmpty()
@@ -20,9 +20,9 @@ export class CreateUserDto {
 
     @IsString()
     @IsOptional()
-    organizationName: string;
+    organization_name: string;
 
     @IsBoolean()
     @IsOptional()
-    isOrganization: boolean;
+    is_organization: boolean;
 }

@@ -21,7 +21,7 @@ export class CreateMissionDto {
     @IsNumber()
     @IsNotEmpty()
     @Type(() => Number)
-    numberOfHours: number;
+    number_of_hours: number;
     
     @IsDateString()
     @IsNotEmpty()
@@ -38,5 +38,5 @@ export class CreateMissionDto {
     @IsNotEmpty()
     @IsNumber()
     @Type(() => Number)
-    volunteerNumber: number;
+    volunteer_number: number;
 }

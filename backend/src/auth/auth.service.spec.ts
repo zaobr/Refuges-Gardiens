@@ -63,7 +63,7 @@ describe('AuthService', () => {
       mockUser.firstname = "Antoine";
       mockUser.lastname = "Dupont";
       mockUser.email = "antoine.dupont@mail.com";
-      mockUser.hashedPassword = await mockHashingService.hash('correctPassword')
+      mockUser.hashed_password = await mockHashingService.hash('correctPassword')
       mockUser.city = "Toulouse";
       mockUser.picture = "";
       mockUser.banner = "";
@@ -98,7 +98,7 @@ describe('AuthService', () => {
       mockUser.firstname = "Antoine";
       mockUser.lastname = "Dupont";
       mockUser.email = "antoine.dupont@mail.com";
-      mockUser.hashedPassword = await mockHashingService.hash('correctPassword');
+      mockUser.hashed_password = await mockHashingService.hash('correctPassword');
       mockUser.city = "Toulouse";
       mockUser.picture = "";
       mockUser.banner = "";
@@ -130,7 +130,7 @@ describe('AuthService', () => {
         firstname: 'John',
         lastname: 'Doe',
         email: 'john.doe@example.com',
-        hashedPassword: 'hashedpassword',
+        hashed_password: 'hashedpassword',
       };
 
       (userService.getUserByEmail as jest.Mock).mockResolvedValue(undefined);

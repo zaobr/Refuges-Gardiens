@@ -21,22 +21,22 @@ export class UserService {
 
   async getUser(id: number): Promise<User[]> {
     return await this.usersRepository.find({
-      select: ['firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phoneNumber', 'description', 'organizationName', 'isAdmin', 'isOrganization', 'createdAt'],
+      select: ['firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phone_number', 'description', 'organization_name', 'is_admin', 'is_organization', 'created_at'],
       where: [{ id: id }],
     });
   } 
 
   async getUserById(id: number): Promise<User | undefined> {
     return await this.usersRepository.findOne({ 
-      select: ['id', 'firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phoneNumber', 'description', 'organizationName', 'isAdmin', 'isOrganization'],
+      select: ['id', 'firstname', 'lastname', 'email', 'city', 'picture', 'banner', 'phone_number', 'description', 'organization_name', 'is_admin', 'is_organization'],
       where: [{ id: id }] 
     });
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
     const user = await this.usersRepository.createQueryBuilder('user')
-    .addSelect('user.hashedPassword')
-    .addSelect('user.resetPasswordToken')
+    .addSelect('user.hashed_password')
+    .addSelect('user.reset_password_token')
     .where('user.email = :email', {email})
     .getOne();
 
