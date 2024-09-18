@@ -40,7 +40,6 @@ export class DisponibilityController {
 
   @Delete(':id')
   deleteDisponibility(@Param('id') id: number, @Body() disponibility: Disponibility) {
-    console.log (`id-del-ctl = ${id}`);
    return this.service.deleteDisponibility(id, disponibility);
   }
 
