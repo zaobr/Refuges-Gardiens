@@ -62,7 +62,7 @@ function MissionEdition() {
                 setMission(missionData);
                 setFormData({
                     title: missionData.title || '',
-                    picture: missionData.picture_url || '',
+                    picture: missionData.picture || '',
                     number_of_hours: missionData.number_of_hours || '',
                     deadline: missionData.deadline || '',
                     volunteer_number: missionData.volunteer_number || '',
