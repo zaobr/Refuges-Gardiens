@@ -78,7 +78,7 @@ export class MissionController {
     @UseGuards(AuthGuard('jwt'))
     @Put(':id')
     @UseInterceptors(FileInterceptor(
-        'file', {
+        'picture', {
         storage: diskStorage({
             destination: './uploads/mission',
             filename: (req, file, cb) => {
@@ -89,23 +89,37 @@ export class MissionController {
         }),
     }))
 
-    async update(@Param('id') id: number, @Body() mission: Mission, @Req() request: Request, @UploadedFile() file: { picture?: Express.Multer.File }) {
+    async update(@Param('id') id: number, @Body() mission: any, @Req() request: Request, @UploadedFile() file: Express.Multer.File) {
 
         // vérification de l'identité de l'user faisant la requête
         let user: Partial<User> = request.user; // Récupère l'id de l'utilisateur de la request
-        let userMission: number = mission.organization.user.id; // Récupère l'id de l'utilisateur de la mission
+        let userMission: number = Number(mission.organizationUserId[0]); // Récupère l'id de l'utilisateur de la mission
 
         if (user.id !== userMission) {
             throw new ForbiddenException("You don't have permission to update this mission")
         }
 
+        const existingMission = await this.service.getMissionById(id)
         // Delete the old picture if a new one is uploaded
-        if (file?.picture) {
-            if (mission.picture && existsSync(`./uploads/user/${mission.picture}`)) {
-                unlinkSync(`./uploads/user/${mission.picture}`); // Deletes the old picture
+        if (file) {
+            // If a new picture is uploaded, delete the old one if it's not default
+            if (existingMission.picture && existingMission.picture !== 'mission-default.png' && existsSync(`./uploads/mission/${existingMission.picture}`)) {
+                unlinkSync(`./uploads/mission/${existingMission.picture}`);
             }
-            user.picture = file.picture.filename; // Save new picture filename
+            mission.picture = file.filename; // Save new picture filename
+
+        } else if (mission.picture === 'null') {
+            // If the user chose to delete the picture, delete the old one and set to null
+            if (existingMission.picture && existingMission.picture !== 'mission-default.png' && existsSync(`./uploads/mission/${existingMission.picture}`)) {
+                unlinkSync(`./uploads/mission/${existingMission.picture}`);
+            }
+            mission.picture = null; // Picture removed
+            
+        } else {
+            // Keep the existing picture if no new file is uploaded and no deletion requested
+            mission.picture = existingMission.picture; // Retain the current picture
         }
+
 
         return await this.service.updateMission(id, mission);
     }

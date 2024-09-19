@@ -43,7 +43,7 @@ export class MissionService {
         }
 
         // Apply limit with default value
-        query.limit(limit ?? 10); // Default limit is 10 if limit is not provided
+        query.limit(limit ??10) ; // Default limit is 10 if limit is not provided
 
         // Select specific fields
         query.select(['mission.id', 'mission.title', 'mission.city', 'mission.description', 'mission.volunteer_number', 'mission.deadline', 'mission.picture', 'mission.created_at']);
@@ -99,35 +99,28 @@ export class MissionService {
     async getMissionById(id: number): Promise<MissionDto> {
         const mission = await this.missionRepository.findOne({
             where: { id: id },
-            relations: ['organization', 'organization.user']
+            relations: ['organization', 'organization.user'],
+            select: [
+                'id', 'title', 'description', 'number_of_hours', 'deadline', 
+                'volunteer_number', 'category', 'city', 'organization', 
+                'is_done', 'picture', 'created_at', 'updated_at'
+            ]
         });
 
-        const missionResponse = new MissionDto();
-        missionResponse.id = mission.id;
-        missionResponse.title = mission.title;
-        missionResponse.description = mission.description;
-        missionResponse.number_of_hours = mission.number_of_hours;
-        missionResponse.deadline = mission.deadline;
-        missionResponse.volunteer_number = mission.volunteer_number;
-        missionResponse.category = mission.category;
-        missionResponse.city = mission.city;
-        missionResponse.organization = mission.organization;
-        missionResponse.is_done = mission.is_done;
-        missionResponse.created_at = mission.created_at;
-        missionResponse.updated_at = mission.updated_at;
-
+        if (!mission) {
+            return undefined;
+        }
+    
         const url = process.env.APP_URL;
         const port = process.env.APP_PORT;
-        if (mission.picture) {
-            missionResponse.picture_url = `${url}:${port}/uploads/mission/${mission.picture}`;
-        } else {
-            missionResponse.picture_url = `${url}:${port}/uploads/mission/mission-default.png`;
-        }
-
-        return missionResponse;
+        const pictureUrl = mission.picture 
+            ? `${url}:${port}/uploads/mission/${mission.picture}` 
+            : `${url}:${port}/uploads/mission/mission-default.png`;
+    
+        return { ...mission, picture_url: pictureUrl };
     }
 
-    async saveMission(createMissionDto: CreateMissionDto): Promise<Mission> {
+    async saveMission(createMissionDto: CreateMissionDto): Promise<MissionDto> {
         const { organization: organizationId, ...missionData } = createMissionDto;
 
         const organization = await this.organizationRepository.findOne({ where: { id: organizationId } });
@@ -137,7 +130,7 @@ export class MissionService {
         }
 
         if (!missionData.picture) {
-            missionData.picture = 'mission-default.png' // à modifier si besoin
+            missionData.picture = 'mission-default.png'
         }
 
         const mission = this.missionRepository.create({
