@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { jwtDecode } from "jwt-decode";
 import Cookies from 'universal-cookie';
 import { useNavigate, useParams } from "react-router-dom";
+import { ImCross } from "react-icons/im";
 
 function MissionEdition() {
     const { missionId } = useParams();
@@ -22,8 +23,8 @@ function MissionEdition() {
     const navigate = useNavigate();
     const [newMission, setNewMission] = useState(false);
     const cookies = new Cookies();
-
-    const [mission, setMission] = useState();
+    const fileInputRef = useRef(null);
+    const [preview, setPreview] = useState(null);
 
     const url = import.meta.env.VITE_API_URL;
 
@@ -59,7 +60,6 @@ function MissionEdition() {
             try {
                 const response = await axios.get(`${url}/mission/${missionId}`);
                 const missionData = response.data
-                setMission(missionData);
                 setFormData({
                     title: missionData.title || '',
                     picture: missionData.picture || '',
@@ -69,8 +69,10 @@ function MissionEdition() {
                     description: missionData.description || '',
                     category: missionData.category || '',
                     city: missionData.city || '',
-                    organization: missionData.organization || '',
+                    organizationUserId: missionData.organization.user.id || '',
+                    picture_url: missionData.picture_url,
                 })
+                setPreview(missionData.picture_url)
             } catch (error) {
                 console.error("Error fetching mission details:", error);
             }
@@ -95,20 +97,47 @@ function MissionEdition() {
         });
     };
 
-    const handleCancel = () => {
+    const handleCancel = (e) => {
+        e.preventDefault()
         navigate(`/mission/${missionId}`)
     }
 
-    const handleConfirm = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
 
             const loginCookie = cookies.get('userLogin')
             const url = import.meta.env.VITE_API_URL
-            const response = await axios.put(`${url}/mission/${missionId}`, formData, {
-                headers: { 'Authorization': `Bearer ${loginCookie}` }
-            })
+           
+            const data = new FormData();
 
+            data.append('organizationUserId', formData.organizationUserId);
+
+            for (const key in formData) {
+                // Handle picture separately
+                if (key !== 'picture' && key !== 'organization') {
+                    data.append(key, formData[key]);
+                }
+            }
+
+            if (formData.picture instanceof File) {
+                // If a new picture is uploaded, append it
+                data.append('picture', formData.picture);
+
+            } else if (formData.picture === null) {
+                // If the picture was deleted, append an empty string
+                data.append('picture', null);
+
+            } else {
+                // If the picture wasn't changed, append the current picture URL
+                data.append('picture', preview || '');
+
+            }
+
+            const response = await axios.put(`${url}/mission/${missionId}`, (data), {
+                headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${loginCookie}` }
+            })
+            
             //si mission modifiée enregistre la nouvelle mission pour afficher la popup et récupérer son id
             if (response.status === 200) {
                 setNewMission(true)
@@ -131,6 +160,25 @@ function MissionEdition() {
     const handleSeeMission = () => {
         navigate(`/mission/${missionId}`)
     }
+
+    const handleDivClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setPreview(URL.createObjectURL(file));
+            setFormData({ ...formData, picture: file });
+        }
+    };
+
+    const handleDeletePicture = (e) => {
+        e.preventDefault();
+        setFormData({ ...formData, picture: null });
+        setPreview(null);
+        document.getElementById('fileInput').value = '';
+    };
 
     return (
         <div>
@@ -155,7 +203,7 @@ function MissionEdition() {
                 </div>
             </div>
             <div>
-                <form>
+                <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <div>
                         <h2 className="text-center font-bold">Modification de mission</h2>
                         <div className="text-center m-3 font-bold">
@@ -165,8 +213,22 @@ function MissionEdition() {
                         </div>
                         <div>
                             <h3 className="font-bold ml-1">Photos</h3>
-                            <div>
-                                <div className="border rounded-lg inline-block m-2"><MdOutlineAddAPhoto className="m-4" size={45} /></div>
+                            <div className="flex">
+                                <div onClick={handleDivClick} className="border rounded-lg inline-block m-2 hover:scale-95 transition-transform duration-200 ease-in-out cursor-pointer"><MdOutlineAddAPhoto className="m-4" size={45} />
+                                </div>
+                                <input
+                                    id="fileInput"
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                                {preview && <div className="flex">
+                                    <img src={preview} alt="Preview" className="w-24 h-24 object-cover m-2 mb-0 border rounded-lg" />
+                                    <button onClick={handleDeletePicture}><ImCross />
+                                    </button>
+                                </div>}
                             </div>
                         </div>
                         <div>
@@ -212,8 +274,8 @@ function MissionEdition() {
                                     className='bg-off-white border-orange-dark border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex ml-1'>
                                     Annuler
                                 </button>
-                                <button onClick={handleConfirm}
-                                    className='bg-orange-dark border-orange-dark font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex mr-1'>
+                                <button
+                                className='bg-orange-dark border-orange-dark font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex mr-1'>
                                     Confirmer
                                 </button>
                             </div>

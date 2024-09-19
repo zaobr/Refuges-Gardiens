@@ -1,4 +1,4 @@
-import axios, { formToJSON } from "axios";
+import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { jwtDecode } from "jwt-decode";
@@ -6,9 +6,6 @@ import Cookies from 'universal-cookie';
 import { useNavigate } from "react-router-dom";
 import { ImCross } from "react-icons/im";
 
-
-
-const cookies = new Cookies();
 
 function MissionCreation() {
     const [formData, setFormData] = useState({
@@ -27,6 +24,7 @@ function MissionCreation() {
     const [newMission, setNewMission] = useState(undefined);
     const fileInputRef = useRef(null);
     const [preview, setPreview] = useState(null);
+    const cookies = new Cookies();
 
     //useEffect pour fetch l'utilisateur connecté 
     useEffect(() => {
@@ -85,7 +83,6 @@ function MissionCreation() {
             ...formData,
             [name]: numericValue
         });
-        console.log(formData, typeof(formData.number_of_hours))
     };
 
     const handleSubmit = async (e) => {
