@@ -18,6 +18,7 @@ import { User } from "../user.entities/user.entity";
 import { UserService } from "../user.services/user.service";
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from '../user.dto/update-user.dto';
+import { UserDto } from '../user.dto/user.dto';
 
 @Controller('user')
 export class UserController {
@@ -30,7 +31,7 @@ export class UserController {
   }
 
   @Get(':id')
-  get(@Param('id') id: number): Promise<User> {
+  get(@Param('id') id: number): Promise<UserDto> {
     return this.service.getUserById(id);
   }
 
@@ -54,38 +55,48 @@ export class UserController {
       },
     }),
   }))
-  async update(@Param('id') id: number, @Body() user: UpdateUserDto, @UploadedFiles() files: { picture?: Express.Multer.File[], banner?: Express.Multer.File[] }
+  async update(@Param('id') id: number, @Body() user: UpdateUserDto, @UploadedFiles() files: { picture?: Express.Multer.File, banner?: Express.Multer.File }
   ) {
+    const picture = files.picture ? files.picture[0] : null;
+    const banner = files.banner ? files.banner[0] : null;
+
     // Fetch the existing user from the database
     const existingUser = await this.service.getUserById(id);
 
     // Delete the old picture if a new one is uploaded
-    if (files?.picture && files.picture[0]) {
-      if (existingUser.picture && existsSync(`./uploads/user/${existingUser.picture}`)) {
+    if (picture) {
+      if (existingUser.picture && existingUser.picture !== 'picture-default.png' && existsSync(`./uploads/user/${existingUser.picture}`)) {
         unlinkSync(`./uploads/user/${existingUser.picture}`); // Deletes the old picture
       }
-      user.picture = files.picture[0].filename; // Save new picture filename
+      user.picture = picture.filename; // Save new picture filename
+    } else if (picture === null) {
+      if (existingUser.picture && existingUser.picture !== 'picture-default.png' && existsSync(`./uploads/user/${existingUser.picture}`)) {
+        unlinkSync(`./uploads/user/${existingUser.picture}`);
+      }
+      user.picture = null;
+
+    } else {
+      user.picture = existingUser.picture;
     }
 
     // Delete the old banner if a new one is uploaded
-    if (files?.banner && files.banner[0]) {
-      if (existingUser.banner && existsSync(`./uploads/user/${existingUser.banner}`)) {
+    if (banner) {
+      if (existingUser.banner && existingUser.banner !== 'banner-default.png' && existsSync(`./uploads/user/${existingUser.banner}`)) {
         unlinkSync(`./uploads/user/${existingUser.banner}`); // Deletes the old banner
       }
-      user.banner = files.banner[0].filename; // Save new banner filename
+      user.banner = banner.filename; // Save new banner filename
+    } else if (banner === null) {
+      if (existingUser.banner && existingUser.banner !== 'banner-default.png' && existsSync(`./uploads/user/${existingUser.banner}`)) {
+        unlinkSync(`./uploads/user/${existingUser.banner}`);
+      }
+      user.banner = null;
+
+    } else {
+      user.banner = existingUser.banner;
     }
 
-    // Update the user with the new image filenames (if they exist)
-    await this.service.updateUser(id, user);
-    return {
-      message: 'User updated',
-      files: {
-        picture: user.picture,
-        banner: user.banner,
-      },
-    };
+    return await this.service.updateUser(id, user)
   }
-
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
