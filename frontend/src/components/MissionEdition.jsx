@@ -106,9 +106,7 @@ function MissionEdition() {
         e.preventDefault();
         try {
 
-            const loginCookie = cookies.get('userLogin')
-            const url = import.meta.env.VITE_API_URL
-           
+            const loginCookie = cookies.get('userLogin')           
             const data = new FormData();
 
             data.append('organizationUserId', formData.organizationUserId);
@@ -125,13 +123,12 @@ function MissionEdition() {
                 data.append('picture', formData.picture);
 
             } else if (formData.picture === null) {
-                // If the picture was deleted, append an empty string
-                data.append('picture', null);
+                // If the picture was deleted, append null
+                data.append('picture', 'null');
 
             } else {
                 // If the picture wasn't changed, append the current picture URL
                 data.append('picture', preview || '');
-
             }
 
             const response = await axios.put(`${url}/mission/${missionId}`, (data), {
@@ -142,6 +139,7 @@ function MissionEdition() {
             if (response.status === 200) {
                 setNewMission(true)
             }
+            
         } catch (error) {
             console.error('Error editing mission', error)
         }
@@ -192,7 +190,7 @@ function MissionEdition() {
                     <div className="grid grid-cols-card-info bg-black bg-opacity-50">
                         <img
                             src={user.picture}
-                            alt="Logo"
+                            alt="Avatar"
                             className="w-16 h-16"
                         />
                         <div className="pr-2">

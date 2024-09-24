@@ -100,7 +100,7 @@ function MissionCard() {
                     {/* Column 3 */}
                     <div className='grid grid-cols-2'>
                         <div className="content-center flex justify-end">
-                            <img src={mission.organization.user.picture} alt={`Photo de ${mission.organization.user.organization_name}`} className="h-20" />
+                            <img src={mission.user_picture_url} alt={`Photo de ${mission.organization.user.organization_name}`} className="h-20" />
                         </div>
                         <div className='content-center'>
                             <p className='text-left'>{mission.organization.user.organization_name}</p>

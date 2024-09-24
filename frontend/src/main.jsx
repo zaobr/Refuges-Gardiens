@@ -21,6 +21,7 @@ import UnauthorizedPage from './pages/UnauthorizedPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import MissionEditionPage from './pages/MissionEditionPage.jsx'
 import NotFoundPage from "./pages/NotFoundPage.jsx"
+import ProfileEditionPage from "./pages/ProfileEditionPage.jsx"
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: '/user/:userId',
         element: <ProfilePage />
+      },
+      {
+        path: '/user/edition',
+        element: <ProfileEditionPage />
       },
       {
         path: '/403',

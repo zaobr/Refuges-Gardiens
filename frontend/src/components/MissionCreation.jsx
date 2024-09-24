@@ -171,7 +171,7 @@ function MissionCreation() {
                         <h2 className="text-center font-bold">Création de mission</h2>
                         <div className="text-center m-3 font-bold">
                             <label>Titre:
-                                <input type="text" name="title" onChange={handleChange} className="border ml-2 rounded-md border-orange-dark" value={formData.title} />
+                                <input type="text" name="title" onChange={handleChange} className="border ml-2 rounded-md border-orange-dark pl-1" value={formData.title} />
                             </label>
                         </div>
                         <div>
@@ -199,13 +199,13 @@ function MissionCreation() {
                             <div className="grid grid-cols-card-info m-1">
                                 <div>
                                     <label>Nombre d'heures
-                                        <input type="number" name="number_of_hours" onChange={handleChangeNumber} value={formData.number_of_hours} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="number_of_hours" onChange={handleChangeNumber} value={formData.number_of_hours} className="border block w-28 rounded-md border-orange-dark pl-1" />
                                     </label>
                                     <label>Besoin de bénévoles
-                                        <input type="number" name="volunteer_number" min={1} onChange={handleChangeNumber} value={formData.volunteer_number} className="border block w-28 rounded-md border-orange-dark" />
+                                        <input type="number" name="volunteer_number" min={1} onChange={handleChangeNumber} value={formData.volunteer_number} className="border block w-28 rounded-md border-orange-dark pl-1" />
                                     </label>
                                     <label>Catégorie
-                                        <select name="category" onChange={handleChange} value={formData.category} className="border block w-28 rounded-md border-orange-dark">
+                                        <select name="category" onChange={handleChange} value={formData.category} className="border block w-28 rounded-md border-orange-dark pl-1">
                                             <option></option>
                                             <option>Animal</option>
                                             <option>Nature</option>
@@ -217,10 +217,10 @@ function MissionCreation() {
                                 <div></div>
                                 <div>
                                     <label>Ville
-                                        <input type="text" name="city" onChange={handleChange} value={formData.city} className="border block rounded-md border-orange-dark" />
+                                        <input type="text" name="city" onChange={handleChange} value={formData.city} className="border block rounded-md border-orange-dark pl-1" />
                                     </label>
                                     <label>Date
-                                        <input type="date" name="deadline" onChange={handleChange} value={formData.deadline} className="border block rounded-md border-orange-dark" />
+                                        <input type="date" name="deadline" onChange={handleChange} value={formData.deadline} className="border block rounded-md border-orange-dark pl-1" />
                                     </label>
                                 </div>
                             </div>
@@ -228,7 +228,7 @@ function MissionCreation() {
                         <div>
                             <h3 className="font-bold ml-1">Description</h3>
                             <div className="flex justify-center">
-                                <textarea name="description" onChange={handleChange} value={formData.description} className="border block rounded-md border-orange-dark m-1 h-32 w-5/6" />
+                                <textarea name="description" onChange={handleChange} value={formData.description} className="border block rounded-md border-orange-dark m-1 h-32 w-5/6 pl-1" />
                             </div>
                         </div>
                         <div className="flex justify-center">

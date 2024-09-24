@@ -98,7 +98,6 @@ export class MissionController {
         if (user.id !== userMission) {
             throw new ForbiddenException("You don't have permission to update this mission")
         }
-
         const existingMission = await this.service.getMissionById(id)
         // Delete the old picture if a new one is uploaded
         if (file) {
@@ -107,7 +106,7 @@ export class MissionController {
                 unlinkSync(`./uploads/mission/${existingMission.picture}`);
             }
             mission.picture = file.filename; // Save new picture filename
-
+           
         } else if (mission.picture === 'null') {
             // If the user chose to delete the picture, delete the old one and set to null
             if (existingMission.picture && existingMission.picture !== 'mission-default.png' && existsSync(`./uploads/mission/${existingMission.picture}`)) {

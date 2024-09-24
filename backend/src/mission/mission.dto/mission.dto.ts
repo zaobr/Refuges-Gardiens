@@ -13,4 +13,5 @@ export class MissionDto {
     is_done: boolean;
     created_at: Date;
     updated_at: Date;
+    user_picture_url?: string;
 }
