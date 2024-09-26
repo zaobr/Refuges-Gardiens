@@ -24,6 +24,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { User } from 'src/user/user.entities/user.entity';
 import { MissionDto } from '../mission.dto/mission.dto';
+import { UserDto } from 'src/user/user.dto/user.dto';
 
 @Controller('mission')
 export class MissionController {
@@ -37,9 +38,10 @@ export class MissionController {
         @Query('city') city?: string,
         @Query('date') date?: string,
         @Query('excludeMissionId') excludeMissionId?: number,
-        @Query('organization_id') organization_id?: number,
+        @Query('organization_id') organizationId?: number,
+        @Query('isDone') isDone?: number,
     ): Promise<MissionDto[]> {
-        return this.service.getMissions({ keyword, city, date, excludeMissionId, organization_id });
+        return this.service.getMissions({ keyword, city, date, excludeMissionId, organizationId, isDone });
     }
 
     @Get(':id')
@@ -61,7 +63,13 @@ export class MissionController {
         }),
     }))
 
-    async create(@Body() mission: CreateMissionDto, @UploadedFile() file: Express.Multer.File) {
+    async create(@Body() mission: CreateMissionDto, @Req() request: Request, @UploadedFile() file: Express.Multer.File) {
+
+        let user: Partial<UserDto> = request.user
+        if (!user.is_organization) {
+            throw new ForbiddenException("You don't have the permission to create a mission")
+        }
+
         // If a file was uploaded, update the DTO with the file information
         if (file) {
             mission.picture = file.filename;
@@ -93,8 +101,7 @@ export class MissionController {
 
         // vérification de l'identité de l'user faisant la requête
         let user: Partial<User> = request.user; // Récupère l'id de l'utilisateur de la request
-        let userMission: number = Number(mission.organizationUserId[0]); // Récupère l'id de l'utilisateur de la mission
-
+        let userMission: number = Number(mission.organizationUserId[0] || mission.organizationUserId); // Récupère l'id de l'utilisateur de la mission
         if (user.id !== userMission) {
             throw new ForbiddenException("You don't have permission to update this mission")
         }

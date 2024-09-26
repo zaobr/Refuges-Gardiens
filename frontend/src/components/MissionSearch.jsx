@@ -20,12 +20,7 @@ function MissionSearch() {
     };
     return (
         <div>
-            <div style={{
-                backgroundImage: `url(https://c4.wallpaperflare.com/wallpaper/632/226/393/dog-backgrounds-for-desktop-hd-backgrounds-wallpaper-preview.jpg)`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover"
-            }}
-                className="pb-5 p-1">
+            <div className="pb-5 p-1 bg-[url('/background_rg.jpg')] bg-cover bg-center">
                 <div className="bg-white bg-opacity-60 m-2 mb-5 rounded-xl">
                     <div className="p-2 text-center">
                         <h2 className="font-bold">Trouvez la mission faite pour vous</h2>

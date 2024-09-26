@@ -10,16 +10,18 @@ export const UserProvider = ({ children }) => {
     const cookie = new Cookies();
     const userId = cookie.get('userId');
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.get(`${url}/user/${userId}`)
-                setUser(response.data)
-            } catch (error) {
-                console.error('Error fetching user data:', error);
+        if (userId) {
+            const fetchUserData = async () => {
+                try {
+                    const response = await axios.get(`${url}/user/${userId}`)
+                    setUser(response.data)
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
             }
+            fetchUserData();
         }
-        fetchUserData();
-    }, [])
+    }, [userId])
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
