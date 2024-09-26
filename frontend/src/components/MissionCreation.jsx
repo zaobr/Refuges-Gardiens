@@ -147,17 +147,15 @@ function MissionCreation() {
         <div>
             <div className="relative w-full h-64">
                 <img
-                    src={user.banner}
+                    src={user.banner_url}
                     alt="Background"
                     className="absolute inset-0 w-full h-full object-cover z-0"
                 />
                 <div className="relative z-10 flex flex-col justify-end h-full p-3 text-white">
                     <div className="grid grid-cols-card-info bg-black bg-opacity-50">
-                        <img
-                            src={user.picture}
-                            alt="Logo"
-                            className="w-16 h-16"
-                        />
+                        <div className="h-20 w-20 place-self-center">
+                            <img src={user.picture_url} className="rounded-full w-full h-full" alt="Logo" />
+                        </div>
                         <div className="pr-2">
                             <h3 className="text-2xl text-right font-bold">{user.organization_name}</h3>
                             <p className="text-lg text-right">{user.city}</p>

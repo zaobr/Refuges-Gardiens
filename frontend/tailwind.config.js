@@ -20,7 +20,7 @@ export default {
       fontFamily: {
         title: ['Raleway', 'sans-serif'],
         text: ['Open Sans', 'sans-serif']
-      }
+      },
     },
   },
   plugins: [],

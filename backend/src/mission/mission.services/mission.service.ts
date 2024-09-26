@@ -16,10 +16,10 @@ export class MissionService {
         private readonly organizationRepository: Repository<Organization>,
     ) { }
 
-    async getMissions(filters: { keyword?: string; city?: string; date?: string; organization_id?: number; excludeMissionId?: number; }, limit?: number): Promise<MissionDto[]> {
+    async getMissions(filters: { keyword?: string; city?: string; date?: string; organizationId?: number; excludeMissionId?: number; isDone?: number }, limit?: number): Promise<MissionDto[]> {
         const query = this.missionRepository.createQueryBuilder('mission');
-        // Apply default condition
-        query.andWhere('mission.is_done = :is_done', { is_done: 0 });
+        
+        query.andWhere('mission.is_done = :is_done', { is_done: filters.isDone ?? 0 });
 
         // Conditionally apply filters
         if (filters.keyword) {
@@ -34,13 +34,16 @@ export class MissionService {
             query.andWhere('mission.deadline = :date', { date: filters.date });
         }
 
-        if (filters.organization_id) {
-            query.andWhere('mission.organization_id = :organization_id', { organization_id: filters.organization_id });
+        if (filters.organizationId) {
+            query.andWhere('mission.organization_id = :organization_id', { organization_id: filters.organizationId });
         }
 
         if (filters.excludeMissionId) {
             query.andWhere('mission.id != :excludeMissionId', { excludeMissionId: filters.excludeMissionId });
         }
+
+        // After applying filters
+        query.orderBy('mission.created_at', 'DESC');
 
         // Apply limit with default value
         query.limit(limit ?? 10); // Default limit is 10 if limit is not provided
@@ -98,18 +101,18 @@ export class MissionService {
 
     async getMissionById(id: number): Promise<MissionDto> {
         const mission = await this.missionRepository
-        .createQueryBuilder('mission')
-        .leftJoinAndSelect('mission.organization', 'organization')
-        .leftJoinAndSelect('organization.user', 'user')
-        .select([
-            'mission.id', 'mission.title', 'mission.description', 'mission.number_of_hours',
-            'mission.deadline', 'mission.volunteer_number', 'mission.category', 'mission.city',
-            'mission.is_done', 'mission.picture', 'mission.created_at', 'mission.updated_at',
-            'organization.id',
-            'user.id', 'user.picture', 'user.organization_name'
-        ])
-        .where('mission.id = :id', { id })
-        .getOne();
+            .createQueryBuilder('mission')
+            .leftJoinAndSelect('mission.organization', 'organization')
+            .leftJoinAndSelect('organization.user', 'user')
+            .select([
+                'mission.id', 'mission.title', 'mission.description', 'mission.number_of_hours',
+                'mission.deadline', 'mission.volunteer_number', 'mission.category', 'mission.city',
+                'mission.is_done', 'mission.picture', 'mission.created_at', 'mission.updated_at',
+                'organization.id',
+                'user.id', 'user.picture', 'user.organization_name', 'user.email'
+            ])
+            .where('mission.id = :id', { id })
+            .getOne();
 
         if (!mission) {
             return undefined;
