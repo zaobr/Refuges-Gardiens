@@ -7,8 +7,10 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { Organization } from '../../organization/organization.entities/organization.entity';
+import { Application } from '../../application/application.entities/application.entity';
 
 @Entity({ name: 'mission' })
 export class Mission {
@@ -46,6 +48,9 @@ export class Mission {
   @ManyToOne(() => Organization, (organization) => organization.missions)
   @JoinColumn({ name: 'organization_id' })
   organization: Organization;
+
+  @OneToMany(() => Application, (application) => application.mission)
+  application: Application[];
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

@@ -53,7 +53,7 @@ export class OrganizationService {
         const user = await this.organizationRepository.manager.findOne(User, { where: { id: userId } });
 
         if (!user) {
-            throw new Error('User not found');
+            throw new NotFoundException('User not found');
         }
 
         const organization = this.organizationRepository.create({

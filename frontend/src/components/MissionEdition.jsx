@@ -19,15 +19,18 @@ function MissionEdition() {
         city: '',
         organization: '',
     });
+    const [mission, setMission] = useState()
     const [user, setUser] = useState([]);
     const navigate = useNavigate();
     const [newMission, setNewMission] = useState(false);
-    const cookies = new Cookies();
     const fileInputRef = useRef(null);
     const [preview, setPreview] = useState(null);
+    const [userId, setUserId] = useState();
 
+    const cookies = new Cookies();  
     const url = import.meta.env.VITE_API_URL;
 
+    // récupère les info du user connecté
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -72,6 +75,7 @@ function MissionEdition() {
                     organizationUserId: missionData.organization.user.id || '',
                     picture_url: missionData.picture_url,
                 })
+                setMission(response.data)
                 setPreview(missionData.picture_url)
             } catch (error) {
                 console.error("Error fetching mission details:", error);
@@ -79,6 +83,23 @@ function MissionEdition() {
         };
         fetchMissionDetails();
     }, [missionId]);
+
+      // récupère id du user connecté
+      useEffect(() => {
+        if (mission) {
+            setUserId(cookies.get('userId'));
+        }
+    }, [mission]);
+
+    // vérifie si le user connecté est le créateur de la mission, sinon 403
+    useEffect(() => {
+        if (mission && userId) {
+            const missionCreator = mission.organization.user.id;
+            if (userId !== missionCreator) {
+                navigate('/403')
+            }
+        }
+    }, [mission, userId]);
 
     const handleChange = (e) => {
         setFormData({

@@ -23,6 +23,7 @@ import MissionEditionPage from './pages/MissionEditionPage.jsx'
 import NotFoundPage from "./pages/NotFoundPage.jsx"
 import ProfileEditionPage from "./pages/ProfileEditionPage.jsx"
 import MissionByUserPage from "./pages/MissionByUserPage.jsx"
+import ApplicantPage from "./pages/VolunteerPage.jsx"
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: '/mission/:missionId/edition',
         element: <MissionEditionPage />
+      },
+      {
+        path: '/mission/:missionId/applicants',
+        element: <ApplicantPage />
       },
       {
         path: '/user/:userId',

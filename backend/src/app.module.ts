@@ -4,11 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { databaseConfig } from './config/database.config';
+
 import { UsersModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { DisponibilitiesModule } from './disponibility/disponibility.module';
 import { OrganizationModule } from './organization/organization.module';
 import { MissionModule } from './mission/mission.module';
+import { ApplicationModule } from './application/application.module';
 
 
 @Module({
@@ -23,7 +25,8 @@ import { MissionModule } from './mission/mission.module';
     AuthModule,
     DisponibilitiesModule,
     MissionModule,
-    OrganizationModule
+    OrganizationModule,
+    ApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

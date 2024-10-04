@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 function MissionList({ missions }) {
     const navigate = useNavigate();
 
-    if (!Array.isArray(missions)) {
-        return <p>Aucun Résultat</p>; // Fallback for non-array data
+    if (!Array.isArray(missions) || missions.length === 0) {
+        return <p>Aucun Résultat</p>; // Fallback for no results
     }
 
     const truncateDescription = (text, maxLength) => {
@@ -18,10 +18,9 @@ function MissionList({ missions }) {
     const handleClickMission = (missionId) => {
         navigate(`/mission/${missionId}`);
     };
-
+    
     return (
         <div>
-            {missions.length > 0 ? (
                 <ul className="w-full">
                     {missions.map((mission) => (
                         <li
@@ -52,9 +51,6 @@ function MissionList({ missions }) {
                         </li>
                     ))}
                 </ul>
-            ) : (
-                <p>Aucun Résultat</p>
-            )}
         </div>
     );
 }

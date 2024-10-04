@@ -16,7 +16,7 @@ function Profile() {
     const url = import.meta.env.VITE_API_URL
 
     useEffect(() => {
-        const fetchMissionDetails = async () => {
+        const fetchUserDetails = async () => {
             try {
                 const response = await axios.get(`${url}/user/${userId}`);
                 setUser(response.data);
@@ -24,7 +24,7 @@ function Profile() {
                 console.error("Error fetching user details:", error);
             }
         };
-        fetchMissionDetails();
+        fetchUserDetails();
     }, [userId]);
 
     useEffect(() => {
@@ -54,7 +54,10 @@ function Profile() {
                     const response = await axios.get(`${url}/mission`, {
                         params: { organizationId: organization_id}
                     });
+                    
+                    if (response.data.length !== 0) {
                     setMissions(Array(response.data[0]))
+                    }
                 } catch (error) {
                     console.error('Error fetching missions', error);
                 }
@@ -109,7 +112,7 @@ function Profile() {
                         <div className="flex items-center mb-2">
                             <h3 className="font-bold">Mes missions</h3>
                             <div className="flex justify-end space-x-2 ml-auto">
-                                {isCreator && (
+                                {isCreator && isOrganization && (
                                     <button className="bg-orange-dark border-orange-dark font-bold text-white text-xs px-2 border rounded-lg shadow-md transform btn-active btn-hover"
                                     onClick={handleCreateMission}>
                                         Créer
