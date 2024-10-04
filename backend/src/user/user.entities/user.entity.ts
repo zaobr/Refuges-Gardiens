@@ -4,9 +4,11 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToOne
+    OneToOne,
+    OneToMany
 } from 'typeorm';
 import { Organization } from '../../organization/organization.entities/organization.entity';
+import { Application } from '../../application/application.entities/application.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -58,6 +60,9 @@ export class User {
 
     @OneToOne(() => Organization, (organization) => organization.user)
     organization: Organization;
+
+    @OneToMany(() => Application, (application) => application.user)
+    application: Application[];
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date; //changer en timestamp
