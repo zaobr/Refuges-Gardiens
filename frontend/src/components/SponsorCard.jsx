@@ -1,12 +1,12 @@
-export default function SponsorCard() {
+export default function SponsorCard({url, name, organization}) {
     return (
-        <div className="card-sponsor p-[10px]">
-            <div className="pet-icon">
-                <img className="w-[100px] h-[80px] rounded-[50%] text-center" src="/public/logo_RG_petit.png"/>
+        <div className="card-sponsor w-[18%] flex flex-col my-2">
+            <div className="pet-icon border-b-4 border-orange-dark drop-shadow-md">
+                <img className="mx-auto" src={url}/>
             </div>
-            <div className="informations flex flex-col justify-center items-center text-text text-[12px]">
-                <div className="pername text-center font-bold">Animal</div>
-                <div className="orgname">Association</div>
+            <div className="informations font-text text-[12px] mt-2 mb-1">
+                <div className="petname text-center font-bold text-gray-800">{name}</div>
+                <div className="orgname text-center text-gray-800 line-clamp-1">{organization}</div>
             </div>
         </div>
     )
