@@ -12,7 +12,12 @@ export default {
         'khaki': '#8CA75A',
         'green-light': '#C7D5A0',
         'turquoise': '#50A699',
-        'sky-blue': '#97D7E1'
+        'sky-blue': '#97D7E1',
+        'black': '#272727',
+        'light-blue': '#4A97A7',
+        'orange-smooth': '#FFE3B7',
+        'white': '#FFF5EE',
+        'brown': '#593c27'
       },
       gridTemplateColumns: {
         'card-info': 'auto 1fr auto',
@@ -23,6 +28,6 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-hamburgers')],
 }
 

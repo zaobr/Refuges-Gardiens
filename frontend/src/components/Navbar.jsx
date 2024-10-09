@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom"
+import HamburgerMenu from "./HamburgerMenu"
+import SearchBar from "./SearchBar"
 
 function Navbar() {
 
     return (
-        <nav>
-            <Link to={`/`}>Home</Link>
-            <Link to={`/register`}>Register</Link>
-            <Link to={`/login`}>Login</Link>
+        <nav className="flex items-center mr-4">
+            <SearchBar />
+            <HamburgerMenu />
         </nav>
     )
 }
