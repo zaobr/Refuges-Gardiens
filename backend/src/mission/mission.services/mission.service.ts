@@ -18,7 +18,9 @@ export class MissionService {
 
     async getMissions(filters: { keyword?: string; city?: string; date?: string; organizationId?: number; excludeMissionId?: number; isDone?: number }, limit?: number): Promise<MissionDto[]> {
         const query = this.missionRepository.createQueryBuilder('mission');
-        
+
+        query.leftJoinAndSelect('mission.organization', 'organization');
+
         query.andWhere('mission.is_done = :is_done', { is_done: filters.isDone ?? 0 });
 
         // Conditionally apply filters
@@ -35,7 +37,7 @@ export class MissionService {
         }
 
         if (filters.organizationId) {
-            query.andWhere('mission.organization_id = :organization_id', { organization_id: filters.organizationId });
+            query.andWhere('organization.id = :organizationId', { organizationId: filters.organizationId });
         }
 
         if (filters.excludeMissionId) {
@@ -49,8 +51,6 @@ export class MissionService {
         query.limit(limit ?? 10); // Default limit is 10 if limit is not provided
 
         // Select specific fields
-        query.select(['mission.id', 'mission.title', 'mission.city', 'mission.description', 'mission.volunteer_number', 'mission.deadline', 'mission.picture', 'mission.created_at']);
-
         query.select([
             'mission.id',
             'mission.title',
@@ -59,7 +59,9 @@ export class MissionService {
             'mission.volunteer_number',
             'mission.deadline',
             'mission.picture',
-            'mission.created_at'
+            'mission.category',
+            'mission.created_at',
+            'organization.id'
         ]);
 
         // Execute the query

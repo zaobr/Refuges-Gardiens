@@ -114,7 +114,7 @@ export class AuthService {
         return resetToken;
     }
 
-    async validateResetToken(resetToken: string, email: string): Promise<Partial<User>> {
+    async validateResetToken(resetToken: string, email: string): Promise<User> {
         const user = await this.userService.getUserByEmail(email);
         if (!user) {
             throw new Error('No valid user');

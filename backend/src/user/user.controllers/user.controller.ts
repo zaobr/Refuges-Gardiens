@@ -8,7 +8,8 @@ import {
   UseGuards,
   Query,
   UseInterceptors,
-  UploadedFiles
+  UploadedFiles,
+  Req,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -19,6 +20,7 @@ import { UserService } from "../user.services/user.service";
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from '../user.dto/update-user.dto';
 import { UserDto } from '../user.dto/user.dto';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -41,7 +43,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
+  @Put('edition')
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'picture', maxCount: 1 },
     { name: 'banner', maxCount: 1 },
@@ -55,44 +57,43 @@ export class UserController {
       },
     }),
   }))
-  async update(@Param('id') id: number, @Body() user: UpdateUserDto, @UploadedFiles() files: { picture?: Express.Multer.File, banner?: Express.Multer.File }
+  async update(@Req() req: {user: User}, @Body() user: UpdateUserDto, @UploadedFiles() files: { picture?: Express.Multer.File, banner?: Express.Multer.File }
   ) {
+
+    const id = req.user.id
+
     const picture = files.picture ? files.picture[0] : null;
     const banner = files.banner ? files.banner[0] : null;
-
+    
     // Fetch the existing user from the database
     const existingUser = await this.service.getUserById(id);
 
-    // Delete the old picture if a new one is uploaded
     if (picture) {
+      // If a new picture was uploaded, delete the old one and save the new one
       if (existingUser.picture && existingUser.picture !== 'picture-default.png' && existsSync(`./uploads/user/${existingUser.picture}`)) {
         unlinkSync(`./uploads/user/${existingUser.picture}`); // Deletes the old picture
       }
       user.picture = picture.filename; // Save new picture filename
-    } else if (picture === null) {
+    } else if (picture === 'null') {
+      // If the picture was explicitly deleted, handle that case
       if (existingUser.picture && existingUser.picture !== 'picture-default.png' && existsSync(`./uploads/user/${existingUser.picture}`)) {
         unlinkSync(`./uploads/user/${existingUser.picture}`);
       }
       user.picture = null;
-
-    } else {
-      user.picture = existingUser.picture;
     }
 
-    // Delete the old banner if a new one is uploaded
     if (banner) {
+      // If a new banner was uploaded, delete the old one and save the new one
       if (existingUser.banner && existingUser.banner !== 'banner-default.png' && existsSync(`./uploads/user/${existingUser.banner}`)) {
         unlinkSync(`./uploads/user/${existingUser.banner}`); // Deletes the old banner
       }
       user.banner = banner.filename; // Save new banner filename
-    } else if (banner === null) {
+    } else if (banner === 'null') {
+      // If the banner was explicitly deleted, handle that case
       if (existingUser.banner && existingUser.banner !== 'banner-default.png' && existsSync(`./uploads/user/${existingUser.banner}`)) {
         unlinkSync(`./uploads/user/${existingUser.banner}`);
       }
       user.banner = null;
-
-    } else {
-      user.banner = existingUser.banner;
     }
 
     return await this.service.updateUser(id, user)

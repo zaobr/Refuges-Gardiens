@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatDate } from "../utils/dateFormatUtils";
 import { FaShare } from "react-icons/fa";
 import MissionList from "./MissionList";
 import Cookies from 'universal-cookie';
+import { UserContext } from "../contexts/userContext";
 
 function MissionCard() {
     const { missionId } = useParams();
@@ -20,6 +21,7 @@ function MissionCard() {
     const [applicationId, setApplicationId] = useState();
     const [loginCookie, setLoginCookie] = useState();
     const [applyPopup, setApplyPopup] = useState(false);
+    const [isOrganization, setIsOrganization] = useState(false);
 
     const url = import.meta.env.VITE_API_URL
 
@@ -60,10 +62,6 @@ function MissionCard() {
         }
     }, [mission]);
 
-    const handleConsultProfile = () => {
-        navigate(`/user/${mission.organization.user.id}`)
-    };
-
     const handleContact = () => {
         const email = `${mission.organization.user.email}`;
         const subject = encodeURIComponent(`Mission ${mission.title}`);
@@ -71,13 +69,10 @@ function MissionCard() {
         window.location.href = `mailto:${email}?subject=${subject}`;
     };
 
-    const handleEditing = () => {
-        navigate(`edition`)
-    };
-
     useEffect(() => {
         if (mission) {
             setUserId(cookie.get('userId'));
+            setIsOrganization(cookie.get('is_organization'));
         }
     }, [mission]);
 
@@ -175,14 +170,6 @@ function MissionCard() {
         }
     }
 
-    const handleSeeApplications = () => {
-        navigate('applicants')
-    }
-
-    const handleGoLogin = () => {
-        navigate('/login')
-    }
-
     //TODO: bouton partager
 
     if (!mission) return <div>Chargement...</div>
@@ -211,18 +198,21 @@ function MissionCard() {
                         </div>
                         <div className='content-center ml-2'>
                             <p className='text-left font-bold'>{mission.organization.user.organization_name}</p>
-                            <button className='text-sm text-center hover:bg-orange-light hover:border-orange-dark hover:border hover:rounded-lg' onClick={handleConsultProfile}>Consulter le profil</button>
+                            <Link to={`/user/${mission.organization.user.id}`}>
+                            <button className='text-sm text-center hover:bg-orange-light hover:border-orange-dark hover:border hover:rounded-lg'>Consulter le profil</button>
+                            </Link>
                         </div>
                     </div>
                 </div>
                 {/* Row 3 */}
                 <div>
                     {isCreator && (<div className="flex justify-center">
+                        <Link to={'edition'}>
                         <button
-                            onClick={handleEditing}
                             className="bg-orange-dark border-orange-dark max-w-28 px-3 mx-2 text-sm font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex">
                             Modifier
                         </button>
+                        </Link>
                         <button onClick={handleIsDone}
                             className="bg-orange-dark border-orange-dark max-w-28 px-3 mx-2 text-sm font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex">
                             Terminée
@@ -256,7 +246,7 @@ function MissionCard() {
                     {!isCreator && (<button onClick={handleContact} className='bg-off-white border-orange-dark border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'>
                         Contacter
                     </button>)}
-                    {!applied && !isCreator && (<button className='bg-orange-dark border-orange-dark disabled:hidden  font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'
+                    {!isOrganization && !applied && !isCreator && (<button className='bg-orange-dark border-orange-dark disabled:hidden  font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'
                         disabled={isDone} onClick={handleApply}>
                         Postuler
                     </button>)}
@@ -264,10 +254,12 @@ function MissionCard() {
                         disabled={isDone} onClick={handleRetireApplication}>
                         Retirer candidature
                     </button>)}
-                    {isCreator && (<button className='bg-orange-dark border-orange-dark disabled:hidden  font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'
-                        disabled={isDone} onClick={handleSeeApplications}>
+                    {isCreator && (<Link to={'applicants'}>
+                        <button className='bg-orange-dark border-orange-dark disabled:hidden  font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex'
+                        disabled={isDone}>
                         Voir les candidatures
-                    </button>)}
+                    </button>
+                    </Link>)}
                     <button className='bg-off-white border-orange-dark border rounded-lg shadow-lg sm:flex-1 flex-shrink-0 w-10 sm:w-auto transform btn-active btn-hover sm:btn-flex-shrink'>
                         <span className="hidden sm:block">Partager</span>
                         <FaShare size={20} className='inline mb-0.5 sm:hidden ml-0.5' />
@@ -314,10 +306,11 @@ function MissionCard() {
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm">
                         <p className="text-center text-lg font-semibold">Vous devez vous connecter pour postuler à cette mission</p>
                         <div className="flex mt-3 gap-3">
+                            <Link to={'/login'}>
                             <button className="bg-orange-dark border-orange-dark font-bold text-white border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex"
-                                onClick={handleGoLogin}
                             >Connexion
                             </button>
+                            </Link>
                             <button className="bg-off-white border-orange-dark font-bold text-black border rounded-lg shadow-lg flex-1 transform btn-active btn-hover btn-flex"
                                 onClick={handleCancel}
                             >Fermer

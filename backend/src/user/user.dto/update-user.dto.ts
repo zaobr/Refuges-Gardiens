@@ -1,6 +1,7 @@
-import { IsOptional, IsString, IsBoolean } from 'class-validator';
+import { IsOptional, IsString, IsBoolean, IsNumber } from 'class-validator';
 
 export class UpdateUserDto {
+
     @IsOptional()
     @IsString()
     readonly firstname?: string;

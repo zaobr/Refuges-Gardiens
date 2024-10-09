@@ -31,6 +31,12 @@ export class ApplicationController {
         return users;
     }
 
+    @Get('user/:userId/missions')
+    async getApplicationsByUserId(@Param('userId') userId: number) {
+        const applications = await this.service.getApplicationsByUserId(userId);
+        return applications;
+    }
+
     @UseGuards(AuthGuard('jwt'))
     @Post()
     async create(@Body() application: ApplicationDto) {
