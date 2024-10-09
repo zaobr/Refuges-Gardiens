@@ -203,14 +203,14 @@ function MissionEdition() {
         <div>
             <div className="relative w-full h-64">
                 <img
-                    src={user.banner}
+                    src={user.banner_url}
                     alt="Background"
                     className="absolute inset-0 w-full h-full object-cover z-0"
                 />
                 <div className="relative z-10 flex flex-col justify-end h-full p-3 text-white">
                     <div className="grid grid-cols-card-info bg-black bg-opacity-50">
                         <img
-                            src={user.picture}
+                            src={user.picture_url}
                             alt="Avatar"
                             className="w-16 h-16"
                         />

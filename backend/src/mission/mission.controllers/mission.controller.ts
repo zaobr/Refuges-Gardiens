@@ -16,7 +16,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { unlinkSync, existsSync } from 'fs';
-import { Mission } from '../mission.entities/mission.entity'
 import { MissionService } from '../mission.services/mission.service';
 import { CreateMissionDto } from '../mission.dto/create-mission.dto';
 import { UseGuards } from '@nestjs/common';
@@ -38,7 +37,7 @@ export class MissionController {
         @Query('city') city?: string,
         @Query('date') date?: string,
         @Query('excludeMissionId') excludeMissionId?: number,
-        @Query('organization_id') organizationId?: number,
+        @Query('organizationId') organizationId?: number,
         @Query('isDone') isDone?: number,
     ): Promise<MissionDto[]> {
         return this.service.getMissions({ keyword, city, date, excludeMissionId, organizationId, isDone });

@@ -4,6 +4,8 @@ import { LoginDto, RegisterDto } from './auth.dto';
 import { UserService } from 'src/user/user.services/user.service';
 import { MailerService } from 'src/mailer/mailer.service';
 import { HashingService } from './hashing.service';
+import { UserDto } from 'src/user/user.dto/user.dto';
+import { User } from 'src/user/user.entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -56,7 +58,7 @@ export class AuthController {
 
     @Post('reset-password')
     async resetPassword(@Query('token') token: string, @Query('email') email: string, @Body('password') password: string) {
-        const user = await this.authService.validateResetToken(token, email)
+        const user:User = await this.authService.validateResetToken(token, email)
 
         const hashed_password = await this.hashingService.hash(password)
         user.hashed_password = hashed_password

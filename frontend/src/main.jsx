@@ -86,7 +86,7 @@ const router = createBrowserRouter([
         element: <ProfilePage />
       },
       {
-        path: '/user/:userId/edition',
+        path: '/user/edition',
         element: <ProfileEditionPage />
       },
       {

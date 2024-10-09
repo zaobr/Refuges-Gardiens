@@ -46,6 +46,20 @@ export class ApplicationService {
         }));
     }
 
+    async getApplicationsByUserId(userId: number): Promise<{ applicationId: number, applicationStatus: boolean, missionId: number }[]> {
+        const applications = await this.applicationRepository
+        .createQueryBuilder('application')
+        .innerJoinAndSelect('application.mission', 'mission')
+        .select(['application.id', 'application.is_accepted', 'mission.id'])
+        .where('application.user_id = :userId', { userId })
+        .getMany();
+        return applications.map(application => ({
+            applicationId: application.id,
+            applicationStatus: application.is_accepted,
+            missionId: application.mission.id
+        }))
+    }
+
     async saveApplication(applicationDto: ApplicationDto): Promise<ApplicationDto> {
         const { user_id: user_id, mission_id: mission_id, ...applicationData } = applicationDto;
 

@@ -140,7 +140,6 @@ function Applicant() {
             await axios.put(`${url}/application/${applicant.applicationId}`, { is_accepted: 0 }, {
                 headers: { 'Authorization': `Bearer ${loginCookie}` }
             });
-            console.log(applicant.applicationId)
             setAccepted(prevAccepted => prevAccepted.filter(acc => acc.id !== applicant.id));
             setApplicants(prevApplicants => [...prevApplicants, applicant]);
         } catch (error) {

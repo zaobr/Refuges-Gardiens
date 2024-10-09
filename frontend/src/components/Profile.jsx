@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import MissionList from "./MissionList";
 
@@ -11,7 +11,6 @@ function Profile() {
     const [isCreator, setIsCreator] = useState(false);
     const [missions, setMissions] = useState([]);
     const { userId } = useParams();
-    const navigate = useNavigate();
 
     const url = import.meta.env.VITE_API_URL
 
@@ -44,48 +43,57 @@ function Profile() {
     }, [user]);
 
     useEffect(() => {
-        if (isOrganization) {
-
-            const fetchMoreMissions = async () => {
+        const fetchMissions = async () => {
+            if (user && user.is_organization) {
+            try {
+                const organization = await axios.get(`${url}/organization/${userId}`);
+                const organizationId = organization.data.id;
+                const response = await axios.get(`${url}/mission`, {
+                    params: { organizationId: organizationId }
+                });
+                const responseOldMissions = await axios.get(`${url}/mission`, {
+                    params: { organizationId: organizationId, isDone: 1, }
+                });
+                setMissions(response.data)
+                setOldMissions(responseOldMissions.data)
+            } catch (error) {
+                console.error('Error fetching missions', error);
+            }
+        }
+            else if (user) {
                 try {
-                    const userId = user.id;
-                    const organization = await axios.get(`${url}/organization/${userId}`);
-                    const organization_id = organization.data.id;
-                    const response = await axios.get(`${url}/mission`, {
-                        params: { organizationId: organization_id}
+                    const response = await axios.get(`${url}/application/user/${userId}/missions`);
+                    const missionIds = response.data.map((item) => item.missionId);
+    
+                    const missionRequests = missionIds.map((missionId) => {
+                      return axios.get(`${url}/mission/${missionId}`);
                     });
-                    
-                    if (response.data.length !== 0) {
-                    setMissions(Array(response.data[0]))
-                    }
+                
+                    const responses = await Promise.all(missionRequests);
+                    const missions = responses.map((response) => response.data);
+                
+                    const notDoneMissions = missions.filter((mission) => mission.is_done === 0);
+                    const doneMissions = missions.filter((mission) => mission.is_done === 1);
+
+                    setMissions(notDoneMissions);
                 } catch (error) {
                     console.error('Error fetching missions', error);
                 }
             }
-            fetchMoreMissions();
-        }
-
-    }, [isOrganization]);
-
-    const handleCreateMission = () => {
-        navigate('/mission/creation');
     }
-
-    const handleSeeMissions = () => {
-        navigate(`/user/${userId}/mission`);
-    }
-
+        fetchMissions();
+    }, [userId, user]);
 
     return (
         <div>
             {user && (
                 <div className="flex flex-col pt-6 items-center min-h-screen">
                     <div className="w-11/12 bg-white/50 mt-3 rounded-lg shadow-md my-4">
-                        <img src={user.banner_url} className="w-full rounded-t-lg" alt="Banner"/>
+                        <img src={user.banner_url} className="w-full rounded-t-lg" alt="Banner" />
                         <div className=" mx-3 pb-6">
                             <div className="flex">
                                 <div className="relative bottom-10 h-24 w-24">
-                                    <img src={user.picture_url} className="rounded-full w-full h-full" alt="Logo"/>
+                                    <img src={user.picture_url} className="rounded-full w-full h-full" alt="Logo" />
                                 </div>
                                 <div className="ml-3">
                                     {isOrganization && (
@@ -101,6 +109,13 @@ function Profile() {
                                     </p>
                                 </div>
                             </div>
+                            {isCreator && (
+                                <Link to={`/user/edition`}>
+                                <button className="bg-orange-dark border-orange-dark font-bold text-white text-xs my-2 px-2 border rounded-lg shadow-md transform btn-active btn-hover">
+                                    Modifier profil
+                                </button>
+                                </Link>
+                            )}
                             {user.description && (
                                 <div>
                                     <h3 className="font-bold">Description</h3>
@@ -113,15 +128,17 @@ function Profile() {
                             <h3 className="font-bold">Mes missions</h3>
                             <div className="flex justify-end space-x-2 ml-auto">
                                 {isCreator && isOrganization && (
-                                    <button className="bg-orange-dark border-orange-dark font-bold text-white text-xs px-2 border rounded-lg shadow-md transform btn-active btn-hover"
-                                    onClick={handleCreateMission}>
+                                    <Link to={'/mission/creation'}>
+                                    <button className="bg-orange-dark border-orange-dark font-bold text-white text-xs px-2 border rounded-lg shadow-md transform btn-active btn-hover">
                                         Créer
                                     </button>
+                                    </Link>
                                 )}
-                                <button className="bg-orange-dark border-orange-dark font-bold text-white text-xs px-2 border rounded-lg shadow-md transform btn-active btn-hover"
-                                onClick={handleSeeMissions}>
+                                <Link to={`/user/${userId}/mission`}>
+                                <button className="bg-orange-dark border-orange-dark font-bold text-white text-xs px-2 border rounded-lg shadow-md transform btn-active btn-hover">
                                     Consulter
                                 </button>
+                                </Link>
                             </div>
                         </div>
                         <MissionList missions={missions} />
